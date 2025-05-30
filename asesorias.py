@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import faiss
+import openai
 from openai import OpenAI
-from openai.error import AuthenticationError
 
 # 0. Configuración inicial
 st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
@@ -35,7 +35,7 @@ def preparar_indice(data):
         try:
             resp = client.embeddings.create(model="text-embedding-ada-002", input=t["materia"])
             embs.append(resp.data[0].embedding)
-        except AuthenticationError:
+        except openai.error.AuthenticationError:
             st.error("Error de autenticación con OpenAI. Verifica tu API key.")
             st.stop()
         except Exception as e:
@@ -68,7 +68,7 @@ def buscar_tutores(consulta, k=3):
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
-    except AuthenticationError:
+    except openai.error.AuthenticationError:
         st.error("Error de autenticación al buscar embeddings.")
         st.stop()
     except Exception as e:
@@ -101,7 +101,7 @@ if consulta:
             temperature=0
         )
         ia_resp = stream.choices[0].message.content
-    except AuthenticationError:
+    except openai.error.AuthenticationError:
         st.error("Error de autenticación al generar respuesta de chat.")
         st.stop()
     except Exception as e:
