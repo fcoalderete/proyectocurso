@@ -116,13 +116,15 @@ for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 6. Función de búsqueda (solo substring)
-def buscar_tutores(consulta, k=3):
-    norm = normalize_text(consulta)
-    sub_matches = [t for t in tutores if norm in normalize_text(t['materia'])]
-    return sub_matches[:k]
+# 6. Función de búsqueda (solo substring) - mostrar todos los matches
 
-# 7. Input y salida en chat
+def buscar_tutores(consulta):
+    norm = normalize_text(consulta)
+    # Encontrar todas las materias que contienen la consulta
+    sub_matches = [t for t in tutores if norm in normalize_text(t['materia'])]
+    return sub_matches
+
+# 7. Input y salida en chat Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role": "user", "content": consulta})
