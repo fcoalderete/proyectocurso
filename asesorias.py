@@ -1,4 +1,4 @@
-# Version 1.6: Display second logo via st.image centered using columns
+# Version 1.7: Remove balloons, add lines and frames around logos in sidebar
 import os
 import streamlit as st
 import pandas as pd
@@ -13,41 +13,50 @@ st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de 
 
 # Sidebar con logos e información de contacto
 # Primer logo + Universidad, Segundo logo + Facultad
-
 def setup_sidebar():
     with st.sidebar:
-        # Primer logo: escala al ancho del contenedor
+        # Línea divisoria antes del primer logo
+        st.markdown("---")
+        # Primer logo: con marco y escala al ancho del contenedor
         if os.path.exists("escudo-texto-color.png"):
-            st.image("escudo-texto-color.png", use_container_width=True)
+            st.markdown(
+                "<img src='escudo-texto-color.png' style='width:100%; border:1px solid #ccc; border-radius:8px; padding:4px;'>",
+                unsafe_allow_html=True
+            )
         else:
             st.write("**[Logo FCA no disponible]**")
-        # Información de la Universidad debajo del primer logo
+        # Línea divisoria después del primer logo
         st.markdown("---")
+        # Información de la Universidad debajo del primer logo
         st.header("Universidad Autónoma de Chihuahua")
         st.write("C. Escorza 900, Col. Centro 31000")
         st.write("Tel. +52 (614) 439 1500")
         st.write("Chihuahua, Chih. México")
-        # Segundo logo: centrado en una columna intermedia y con ancho fijo
+
+        # Línea divisoria antes del segundo logo
+        st.markdown("---")
+        # Segundo logo: centrado, con ancho fijo y marco
         if os.path.exists("fca-escudo.png"):
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                st.image("fca-escudo.png", width=100)
+            st.markdown(
+                "<div style='text-align:center;'>"
+                "<img src='fca-escudo.png' width='100' style='border:1px solid #ccc; border-radius:8px; padding:4px;'/>"
+                "</div>",
+                unsafe_allow_html=True
+            )
         else:
             st.write("**[Logo UACH no disponible]**")
-        # Información de la Facultad debajo del segundo logo
+        # Línea divisoria después del segundo logo
         st.markdown("---")
+        # Información de la Facultad debajo del segundo logo
         st.header("Facultad de Contaduría y Administración")
         st.write("Circuito Universitario Campus II")
         st.write("Tel. +52 (614) 442 0000")
         st.write("Chihuahua, Chih. México")
+
         st.markdown("---")
         st.write("**Realizado por Francisco Aldrete**")
 
 setup_sidebar()
-
-# Animación de bienvenida
-st.balloons()
-
 
 # Título y subtítulo de la aplicación
 st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
@@ -61,6 +70,7 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 # 1.4 - Handled missing logo files in sidebar.
 # 1.5 - Replaced use_column_width; centered and resized logos with HTML.
 # 1.6 - Use st.image within columns to center second logo and avoid HTML.
+# 1.7 - Removed balloons, added dividers and frames around logos.
 
 # 1. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
@@ -82,7 +92,6 @@ def cargar_tutores(path="tutores.csv"):
     df_local.columns = [c.strip().lower() for c in df_local.columns]
     return df_local.to_dict(orient="records")
 
-# Carga efectiva
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
