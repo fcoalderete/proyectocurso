@@ -1,4 +1,4 @@
-# Version 1.7: Remove balloons, add lines and frames around logos in sidebar
+# Version 1.8: Use st.image within centered columns for both logos; add borders via CSS in markdown before images
 import os
 import streamlit as st
 import pandas as pd
@@ -11,48 +11,53 @@ import unicodedata
 # 0. Configuración inicial
 st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
 
-# Sidebar con logos e información de contacto
+# Función de normalización de texto
+def normalize_text(s):
+    nkfd = unicodedata.normalize('NFKD', s)
+    return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
+
+# 1. Sidebar con logos e información de contacto
 # Primer logo + Universidad, Segundo logo + Facultad
 def setup_sidebar():
     with st.sidebar:
-        # Línea divisoria antes del primer logo
         st.markdown("---")
-        # Primer logo: con marco y escala al ancho del contenedor
+        # Primer logo: centrado y con borde
         if os.path.exists("escudo-texto-color.png"):
-            st.markdown(
-                "<img src='escudo-texto-color.png' style='width:100%; border:1px solid #ccc; border-radius:8px; padding:4px;'>",
-                unsafe_allow_html=True
-            )
+            c1, c2, c3 = st.columns([1, 2, 1])
+            with c2:
+                st.markdown(
+                    "<div style='border:1px solid #ccc; border-radius:8px; padding:4px;'>",
+                    unsafe_allow_html=True
+                )
+                st.image("escudo-texto-color.png", width=120)
+                st.markdown("</div>", unsafe_allow_html=True)
         else:
             st.write("**[Logo FCA no disponible]**")
-        # Línea divisoria después del primer logo
         st.markdown("---")
-        # Información de la Universidad debajo del primer logo
+        # Información de la Universidad
         st.header("Universidad Autónoma de Chihuahua")
         st.write("C. Escorza 900, Col. Centro 31000")
         st.write("Tel. +52 (614) 439 1500")
         st.write("Chihuahua, Chih. México")
-
-        # Línea divisoria antes del segundo logo
         st.markdown("---")
-        # Segundo logo: centrado, con ancho fijo y marco
+        # Segundo logo: centrado y con borde
         if os.path.exists("fca-escudo.png"):
-            st.markdown(
-                "<div style='text-align:center;'>"
-                "<img src='fca-escudo.png' width='100' style='border:1px solid #ccc; border-radius:8px; padding:4px;'/>"
-                "</div>",
-                unsafe_allow_html=True
-            )
+            c1, c2, c3 = st.columns([1, 2, 1])
+            with c2:
+                st.markdown(
+                    "<div style='border:1px solid #ccc; border-radius:8px; padding:4px;'>",
+                    unsafe_allow_html=True
+                )
+                st.image("fca-escudo.png", width=100)
+                st.markdown("</div>", unsafe_allow_html=True)
         else:
             st.write("**[Logo UACH no disponible]**")
-        # Línea divisoria después del segundo logo
         st.markdown("---")
-        # Información de la Facultad debajo del segundo logo
+        # Información de la Facultad
         st.header("Facultad de Contaduría y Administración")
         st.write("Circuito Universitario Campus II")
         st.write("Tel. +52 (614) 442 0000")
         st.write("Chihuahua, Chih. México")
-
         st.markdown("---")
         st.write("**Realizado por Francisco Aldrete**")
 
@@ -70,21 +75,17 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 # 1.4 - Handled missing logo files in sidebar.
 # 1.5 - Replaced use_column_width; centered and resized logos with HTML.
 # 1.6 - Use st.image within columns to center second logo and avoid HTML.
-# 1.7 - Removed balloons, added dividers and frames around logos.
+# 1.7 - Removed balloons; added dividers and frames.
+# 1.8 - Refined centering and borders for both logos with st.image in columns.
 
-# 1. Validación y cliente de OpenAI
+# 2. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
 if not api_key:
     st.error("Clave de OpenAI no encontrada. Define 'api_key' en .streamlit/secrets.toml o en Secrets de Streamlit Cloud.")
     st.stop()
 client = OpenAI(api_key=api_key)
 
-# Función de normalización de texto
-def normalize_text(s):
-    nkfd = unicodedata.normalize('NFKD', s)
-    return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
-
-# 2. Carga de datos de tutores
+# 3. Carga de datos de tutores
 @st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df_local = pd.read_csv(path)
@@ -94,7 +95,7 @@ def cargar_tutores(path="tutores.csv"):
 
 tutores = cargar_tutores()
 
-# 3. Preparación del índice semántico
+# 4. Preparación del índice semántico
 @st.cache_resource
 def preparar_indice(data):
     embs = []
@@ -108,27 +109,26 @@ def preparar_indice(data):
 
 index = preparar_indice(tutores)
 
-# 4. Historial conversacional
+# 5. Historial conversacional
 if "history" not in st.session_state:
     st.session_state.history = [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 5. Función de búsqueda (solo substring)
+# 6. Función de búsqueda (solo substring)
 def buscar_tutores(consulta, k=3):
     norm = normalize_text(consulta)
     sub_matches = [t for t in tutores if norm in normalize_text(t['materia'])]
     return sub_matches[:k]
 
-# 6. Input y salida en chat
+# 7. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role": "user", "content": consulta})
     with st.chat_message("user"):
         st.write(consulta)
 
-    # Mostrar spinner mientras busca tutores
     with st.spinner("🔍 Buscando profesores..."):
         recomendados = buscar_tutores(consulta)
 
@@ -143,7 +143,6 @@ if consulta:
         st.warning("No hay maestro asesor disponible para esa materia.")
         st.info("Sin embargo, puedo ayudarte con otras dudas o brindarte más información.")
 
-    # Conversación adicional con IA con spinner de espera
     with st.spinner("⌛ Generando respuesta de IA..."):
         stream = client.chat.completions.create(
             model="gpt-4o-mini",
