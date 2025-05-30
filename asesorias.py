@@ -21,9 +21,12 @@ client = OpenAI(api_key=api_key)
 @st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
+    # Limpiar espacios en blanco en todas las celdas de texto
+    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
+# Carga efectiva
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
@@ -54,9 +57,16 @@ for msg in st.session_state.history[1:]:
 
 # 5. Función de búsqueda (exacta y semántica)
 def buscar_tutores(consulta, k=3):
-    exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
-    if exact:
-        return exact[:k]
+    norm = consulta.lower().strip()
+    # 5.1 Coincidencia exacta por palabra completa
+    word_matches = [t for t in tutores if norm in t["materia"].lower().split()]
+    if word_matches:
+        return word_matches[:k]
+    # 5.2 Coincidencia por substring
+    sub_matches = [t for t in tutores if norm in t["materia"].lower()]
+    if sub_matches:
+        return sub_matches[:k]
+    # 5.3 Búsqueda semántica
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
