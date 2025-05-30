@@ -124,41 +124,29 @@ def buscar_tutores(consulta):
     sub_matches = [t for t in tutores if norm in normalize_text(t['materia'])]
     return sub_matches
 
-# 7. Input y salida en chat Input y salida en chat
+# 7. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role": "user", "content": consulta})
     with st.chat_message("user"):
         st.write(consulta)
 
+    # Búsqueda en CSV
     with st.spinner("🔍 Buscando profesores..."):
         recomendados = buscar_tutores(consulta)
 
+    st.markdown("---")
     if recomendados:
-        st.markdown("---")
         st.subheader("Profesores recomendados:")
         for t in recomendados:
             line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
             st.markdown(line)
-        # Sugerencia para ayuda adicional via IA
+        # Sugerencia de ayuda adicional via IA
         st.markdown("---")
-        st.info("¿Necesitas más ayuda o detalles específicos? Puedes hacerme otra pregunta y te responderé usando IA.")
+        st.info("¿Necesitas más ayuda o detalles específicos? Escribe tu pregunta para recibir asistencia de IA.")
     else:
-        st.markdown("---")
         st.warning("No hay maestro asesor disponible para esa materia.")
-        with st.spinner("⌛ Generando respuesta de IA..."):
-            stream = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=st.session_state.history,
-                max_tokens=800,
-                temperature=0
-            )
-            ia_resp = stream.choices[0].message.content
-        st.session_state.history.append({"role": "assistant", "content": ia_resp})
-        with st.chat_message("assistant"):
-            st.write(ia_resp)
-        st.markdown("---")
-        st.warning("No hay maestro asesor disponible para esa materia.")
+        # Llamada a IA si no hay resultados en CSV
         with st.spinner("⌛ Generando respuesta de IA..."):
             stream = client.chat.completions.create(
                 model="gpt-4o-mini",
