@@ -24,7 +24,6 @@ def cargar_tutores(path="tutores.csv"):
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
-# Carga efectiva
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
@@ -35,9 +34,6 @@ def preparar_indice(data):
         try:
             resp = client.embeddings.create(model="text-embedding-ada-002", input=t["materia"])
             embs.append(resp.data[0].embedding)
-        except openai.error.AuthenticationError:
-            st.error("Error de autenticación con OpenAI. Verifica tu API key.")
-            st.stop()
         except Exception as e:
             st.error(f"Error generando embeddings: {e}")
             st.stop()
@@ -46,31 +42,24 @@ def preparar_indice(data):
     index.add(arr)
     return index
 
-# Índice instanciado
 index = preparar_indice(tutores)
 
 # 4. Historial conversacional
 if "history" not in st.session_state:
     st.session_state.history = [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
 
-# Mostrar historial previo
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
 # 5. Función de búsqueda (exacta y semántica)
 def buscar_tutores(consulta, k=3):
-    # Búsqueda exacta
     exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
     if exact:
         return exact[:k]
-    # Búsqueda semántica
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
-    except openai.error.AuthenticationError:
-        st.error("Error de autenticación al buscar embeddings.")
-        st.stop()
     except Exception as e:
         st.error(f"Error en búsqueda semántica: {e}")
         st.stop()
@@ -80,19 +69,17 @@ def buscar_tutores(consulta, k=3):
 # 6. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
-    # Añadir mensaje del usuario al historial
     st.session_state.history.append({"role": "user", "content": consulta})
     with st.chat_message("user"):
         st.write(consulta)
 
-    # Obtener recomendaciones
     recomendados = buscar_tutores(consulta)
     st.subheader("Profesores recomendados:")
     for t in recomendados:
         line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
         st.markdown(line)
 
-    # Llamada al chat de OpenAI para conversación adicional
+    # Conversación adicional con IA
     try:
         stream = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -101,14 +88,10 @@ if consulta:
             temperature=0
         )
         ia_resp = stream.choices[0].message.content
-    except openai.error.AuthenticationError:
-        st.error("Error de autenticación al generar respuesta de chat.")
-        st.stop()
     except Exception as e:
-        st.error(f"Error en llamada de chat completions: {e}")
+        st.error(f"Error generando respuesta de chat: {e}")
         st.stop()
 
-    # Mostrar respuesta de IA
     st.session_state.history.append({"role": "assistant", "content": ia_resp})
     with st.chat_message("assistant"):
         st.write(ia_resp)
