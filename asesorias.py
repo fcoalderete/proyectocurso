@@ -141,17 +141,14 @@ if consulta:
     else:
         st.markdown("---")
         st.warning("No hay maestro asesor disponible para esa materia.")
-        st.info("Sin embargo, puedo ayudarte con otras dudas o brindarte más información.")
-
-    with st.spinner("⌛ Generando respuesta de IA..."):
-        stream = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=st.session_state.history,
-            max_tokens=800,
-            temperature=0
-        )
-        ia_resp = stream.choices[0].message.content
-
-    st.session_state.history.append({"role": "assistant", "content": ia_resp})
-    with st.chat_message("assistant"):
-        st.write(ia_resp)
+        with st.spinner("⌛ Generando respuesta de IA..."):
+            stream = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=st.session_state.history,
+                max_tokens=800,
+                temperature=0
+            )
+            ia_resp = stream.choices[0].message.content
+        st.session_state.history.append({"role": "assistant", "content": ia_resp})
+        with st.chat_message("assistant"):
+            st.write(ia_resp)
