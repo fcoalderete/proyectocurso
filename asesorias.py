@@ -1,4 +1,5 @@
-# Version 1.3: Fix cache decorator placement for cargar_tutores
+# Version 1.4: Handle missing logo files safely in sidebar
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -13,14 +14,24 @@ st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de 
 # Sidebar con logos e información de contacto
 def setup_sidebar():
     with st.sidebar:
-        st.image("escudo-texto-color.png", use_column_width=True)
-        st.image("fca-escudo.png", use_column_width=True)
+        # Logo FCA (texto color)
+        if os.path.exists("escudo-texto-color.png"):
+            st.image("escudo-texto-color.png", use_column_width=True)
+        else:
+            st.write("**[Logo FCA no disponible]**")
+        # Logo Escudo
+        if os.path.exists("fca-escudo.png"):
+            st.image("fca-escudo.png", use_column_width=True)
+        else:
+            st.write("**[Logo UACH no disponible]**")
         st.markdown("---")
+        # Información de contacto FCA
         st.header("Facultad de Contaduría y Administración")
         st.write("Circuito Universitario Campus II")
         st.write("Tel. +52 (614) 442 0000")
         st.write("Chihuahua, Chih. México")
         st.markdown("---")
+        # Información de contacto UACH
         st.header("Universidad Autónoma de Chihuahua")
         st.write("C. Escorza 900, Col. Centro 31000")
         st.write("Tel. +52 (614) 439 1500")
@@ -38,6 +49,7 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 # 1.1 - Removed semantic fallback.
 # 1.2 - Added sidebar.
 # 1.3 - Fixed decorator placement for cargar_tutores caching.
+# 1.4 - Handle missing logo files in sidebar.
 
 # 1. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
@@ -52,7 +64,6 @@ def normalize_text(s):
     return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
 
 # 2. Carga de datos de tutores
-df = None
 @st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df_local = pd.read_csv(path)
