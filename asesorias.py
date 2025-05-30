@@ -55,18 +55,26 @@ for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 5. Función de búsqueda (exacta y semántica)
+# 5. Función de búsqueda con tolerancia a errores tipográficos y coincidencias
+from difflib import get_close_matches
+
 def buscar_tutores(consulta, k=3):
     norm = consulta.lower().strip()
-    # 5.1 Coincidencia exacta por palabra completa
+    # 5.1 Búsqueda difusa (fuzzy) sobre nombres de materia
+    materias_set = list({t["materia"].lower() for t in tutores})
+    close = get_close_matches(norm, materias_set, n=k, cutoff=0.6)
+    if close:
+        matches = [t for t in tutores if t["materia"].lower() in close]
+        return matches[:k]
+    # 5.2 Coincidencia exacta por palabra completa
     word_matches = [t for t in tutores if norm in t["materia"].lower().split()]
     if word_matches:
         return word_matches[:k]
-    # 5.2 Coincidencia por substring
+    # 5.3 Coincidencia por substring
     sub_matches = [t for t in tutores if norm in t["materia"].lower()]
     if sub_matches:
         return sub_matches[:k]
-    # 5.3 Búsqueda semántica
+    # 5.4 Búsqueda semántica como fallback
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
@@ -76,7 +84,7 @@ def buscar_tutores(consulta, k=3):
     D, I = index.search(np.array([q_emb], dtype="float32"), k=k)
     return [tutores[i] for i in I[0]]
 
-# 6. Input y salida en chat
+# 6. Input y salida en chat Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role": "user", "content": consulta})
