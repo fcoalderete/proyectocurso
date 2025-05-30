@@ -1,0 +1,319 @@
+Materia,Maestro,Días,Hora,Lugar
+Administración I,Armendáriz Vega Jorge,Martes y Jueves,09:00 a 10:00,Edificio Académico cubículo 18
+Administración I,Chávez Hernández Paul Adrián,Lunes y Jueves,18:00 a 19:00,Edificio Académico cubículo 5
+Administración I,Gallegos Murillo Ricardo,Miércoles,18:00 a 20:00,Edificio Académico cubículo 20
+Administración I,Caro Lazos Luis Ever,Lunes a Viernes,10:00 a 14:00,Edificio Académico cubículo 34
+Administración I,González Terrazas Armando Salustio,Martes y Jueves,12:00 a 13:00,Sala de Maestros
+Administración I,Holguín Magallanes Karinna Idalia,Martes,10:00 a 12:00,Edificio Académico cubículo 3
+Administración I,García Bencomo Myrna Isela,Lunes,14:00 a 15:00,Edificio Académico cubículo 34
+Administración I,Flores Ahumada Orieta Iveth,Martes y jueves,11:00 a 12:00,Edificio Académico cubículo 20
+Administración I,Maldonado Iglesias María Guadalupe,Martes y Jueves,08:00 a 09:00,Edificio Académico cubículo 10
+Administración I,Ogaz Alamillo Mercedes,Lunes y Martes,13:00 a 14:00,Edificio Académico cubículo 35
+Administración I,Nieto García Samuel,Martes,11:00 a 12:00,Edificio Académico cubículo 1
+Administración I,Pérez Heiras Claudia Patricia,Viernes,12:00 a 14:00,Edificio Académico cubículo 34
+Administración I,Silva Jaime Juan Carlos,Martes y Miércoles,18:00 a 19:00,Oficina Posgrado
+Administración I,Flores Morales Carmen Romelia,Jueves y Viernes; Lunes Martes y Miércoles,10:00 a 11:00; 12:00 a 13:00,Edificio Académico cubículo 18
+Administración I,Torres Medina Ramón,Lunes a Viernes,11:00 a 12:00,Edificio Académico cubículo 37
+Aspectos Básicos de Contabilidad,Aguirre Rodríguez Jaime,Lunes,12:00 a 14:00,Edificio Académico cubículo 7
+Aspectos Básicos de Contabilidad,Ávila Villalobos Octavio Ernesto,Jueves y Viernes,11:00 a 12:00 Viernes; 17:00 a 18:00 Jueves,Virtual
+Aspectos Básicos de Contabilidad,Berroterán Martínez Viviana,Previa cita,Previa cita,Oficina Secretaría Académica
+Aspectos Básicos de Contabilidad,Cabrera Ramos Cristina,Previa cita,Previa cita,Edificio Académico cubículo 22
+Aspectos Básicos de Contabilidad,Flores García Mauro Alberto,Miércoles,12:00 a 14:00,Edificio Académico cubículo 36
+Aspectos Básicos de Contabilidad,Ruíz Balderrama Linda Ventura,Lunes,16:00 a 18:00,Edificio Académico cubículo 38
+Aspectos Básicos de Contabilidad,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Aspectos Básicos de Contabilidad,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Fundamentos de Derecho,Aguilera García Liz,Martes,10:00 a 11:00,Edificio Académico cubículo 18
+Fundamentos de Derecho,Bustillos Varela Xóchitl,Lunes y Martes; Lunes a Jueves,12:00 a 13:00 Presencial; 16:00 a 18:00 Virtual,Edificio Académico cubículo 9
+Fundamentos de Derecho,Ramos Ruelas Leonardo,Lunes a Viernes,13:00 a 14:00,Edificio Académico cubículo 23
+Fundamentos de Derecho,Rocha Acosta José Armado,Viernes,10:00 a 12:00,Edificio Académico cubículo 20
+Inglés 1,González Moreno Sonia Esther,Viernes,11:00 a 13:00,Edificio Académico Cubículo 26
+Inglés 1,Torres Valdés Consuelo,Miércoles,15:00 a 16:00,Salón 29
+Inglés 1,Loya Martínez Ana Luisa,Viernes,12:00-13:00,Edificio Académico Cubículo 8
+Inglés 1,De la Rocha Ordaz Gabriel,Miércoles,18:00 a 20:00,Edificio Académico Cubículo 13
+Matemáticas básicas,Chávez Márquez Irma Leticia,Lunes y Martes,12:00 a 13:00,Edificio Académico cubículo 3
+Matemáticas básicas,Porras Licón Fernando,Martes y Miércoles,10:00 a 11:00,Biblioteca
+Matemáticas básicas,Ramos Rascón Cristina Liliana,Viernes,9:00 a 11:00,Edificio Académico cubículo 23
+Matemáticas básicas,Velázquez Pérez Roberto,Lunes,11:00 a 13:00,Edificio Académico cubículo 38
+Matemáticas básicas,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Matemáticas básicas,Viramontes Olivas Oscar Alejandro,Lunes y Jueves,10:00 a 11:00,Edificio Académico cubículo 16
+Sociedad y Cultura,Caraveo Erives Rosa María,Martes Miércoles y Jueves,14:00 a 15:00,Edificio Académico cubículo 18
+Sociedad y Cultura,Durán Valdez Kenya Cristina,Lunes,18:00 a 19:00,Edificio Académico cubículo 19
+Sociedad y Cultura,Flores Ahumada Orieta Iveth,Martes y jueves,11:00 a 12:00,Edificio Académico cubículo 20
+Sociedad y Cultura,Prieto Mendoza Verónica,Lunes y Martes,17:00 a 18:00,Edificio Académico cubículo 20
+Sociedad y cultura,Robles Villa Jesús,Martes y Miércoles,10:00 a 11:00,Edificio Académico cubículo 4
+Tecnologías y manejo de la información,Arreola Serrano Miguel Ángel,Martes,16:00 a 18:00,Edificio Académico cubículo 9
+Tecnologías y manejo de la información,Fraire Rodríguez Marcelino,Lunes,10:00 a 12:00,Edificio Académico cubículo 40
+Matemáticas discretas,Gutiérrez Diez María de Carmen,Lunes,11:00 a 13:00,Sala de Maestros Cubículo 1
+Tecnologías y manejo de la información,Gutiérrez García Juan Javier,Lunes y Miércoles,18:00 a 19:00,Edificio Académico cubículo 22
+Tecnologías y manejo de la información,Hernández Perea José Juan,Lunes y Miércoles,14:00 a 15:00,Edificio Académico cubículo 23
+Tecnologías y manejo de la información,Hernández Vega Oscar,Previa cita,Previa cita,Oficina Control Escolar
+Tecnologías y manejo de la información,Holguín Magallanes Karinna Idalia,Martes,10:00 a 12:00,Edificio Académico cubículo 3
+Tecnologías y manejo de la información,Ordoñez Parada Ana Isabel,Martes y Jueves,17:00 a 19:00,Virtual
+Tecnologías y manejo de la información,Pérez Tapia Juan Daniel,Martes,15:00 a 18:00,Oficina Comunicación Interna
+Tecnologías y manejo de la información,Piñón Howlet Laura Cristina,Martes y Jueves,08:00 a 09:00,Sala de Maestros
+Tecnologías y manejo de la información,Robles Lozoya Nora,Lunes y Martes,12:00 a 13:00 Presencial; 17:00 a 18:00 Virtual,Edificio Académico cubículo 6; Virtual
+Tecnologías y manejo de la información,Sáenz Olivas Jesús,Martes y Jueves,17:00 a 19:00,Virtual
+Tecnologías y manejo de la información,Sandoval Chaparro Jesús,Martes,08:00 a 09:00,Edificio Académico cubículo 1
+Tecnologías y manejo de la información,Sapién Aguilar Alma Lilia,Lunes y Miércoles,08:00 a 09:00,Sala de Maestros
+Administración II,Alvídrez Díaz María del Rosario de Fátima,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 14
+Administración II,Anchondo de las Casas Roberto Octavio,Martes y Jueves,08:00 a 09:00,Edificio Académico cubículo 21
+Administración II,Arizmendi Armendáriz Aldo Erubiel,Martes y Viernes,09:00 a 10:00,Edificio Académico cubículo 40
+Administración II,Caro Lazos Luis Ever,Lunes a Viernes,10:00 a 14:00,Edificio Académico cubículo 34
+Administración II,Nieto García Samuel,Martes,11:00 a 12:00,Edificio Académico cubículo 1
+Administración II,Méndez González José Emilio,Martes y Miércoles,15:00 a 16:00,Edificio Académico cubículo 8
+Administración II,Rosales Manjarrez Yolanda,Miércoles y Jueves; Lunes Martes y Jueves,13:00 a 14:00 Presencial; 16:00 en delante virtual,Edificio Académico cubículo 21
+Administración ll,Flores Morales Carmen Romelia,Jueves y Viernes; Lunes Martes y Miércoles,10:00 a 11:00; 12:00 a 13:00,Edificio Académico cubículo 18
+Administración ll,Domínguez Cázares María Isabel,Lunes a Viernes,11:00 a 12:00,Edificio Académico cubículo 10
+Cálculo Integral y Diferencial,Ramos Rascón Cristina Liliana,Viernes,9:00 a 11:00,Edificio Académico cubículo 23
+Cálculo Integral y Diferencial,Domínguez Alcaraz Isidro,Miércoles y Jueves,11:00 a 12:00,Edificio Académico cubículo 22
+Contabilidad Financiera,Aguirre Rodríguez Jaime,Lunes,12:00 a 14:00,Edificio Académico cubículo 7
+Contabilidad Financiera,Ávila Villalobos Octavio Ernesto,Jueves y Viernes,11:00 a 12:00 Viernes; 17:00 a 18:00 Jueves,Virtual
+Contabilidad Financiera,Flores García Mauro Alberto,Miércoles,12:00 a 14:00,Edificio Académico cubículo 36
+Contabilidad Financiera,Rodríguez Pérez María de Lourdes,Lunes,11:00 a 13:00,Edificio Académico cubículo 35
+Contabilidad Financiera,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Contabilidad Financiera,Ruíz Balderrama Linda Ventura,Lunes,16:00 a 18:00,Edificio Académico cubículo 38
+Estadística,Chávez Márquez Irma Leticia,Lunes y Martes,12:00 a 13:00,Edificio Académico cubículo 3
+Estadística,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Estadística,Flores Fuentes Carmen Gabriela,Jueves y Viernes,14:00 a 15:00,Edificio Académico cubículo 21
+Estadística,Reyes López José Gerardo,Lunes y Martes,13:00 a 14:00,Edificio Académico cubículo 1
+Estadística,Viramontes Olivas Oscar Alejandro,Lunes y Jueves,10:00 a 11:00,Edificio Académico cubículo 16
+Habilidades y Técnicas de Aprendizaje Universitario,Caraveo Erives Rosa María,Martes Miércoles y Jueves,14:00 a 15:00,Edificio Académico cubículo 18
+Inglés 2,González Moreno Sonia Esther,Viernes,11:00 a 13:00,Edificio Académico Cubículo 26
+Inglés 2,Loya Martínez Ana Luisa,Viernes,12:00-13:00,Edificio Académico Cubículo 8
+Inglés 2,Torres Valdés Consuelo,Miércoles,15:00 a 16:00,Salón 29
+Lenguaje y Comunicación,Durán Valdez Kenya Cristina,Lunes,18:00 a 19:00,Edificio Académico cubículo 19
+Lenguaje y Comunicación,Caraveo Erives Rosa María,Martes Miércoles y Jueves,14:00 a 15:00,Edificio Académico cubículo 18
+Organización de datos,Arreola Serrano Miguel Ángel,Martes,16:00 a 18:00,Edificio Académico cubículo 9
+Organización de datos,Holguín Magallanes Karinna Idalia,Martes,10:00 a 12:00,Edificio Académico cubículo 3
+Organización de datos,Pérez Tapia Juan Daniel,Martes,15:00 a 18:00,Oficina Comunicación Interna
+Organización de datos,Martínez Burrola Rubén Roberto,Previa cita,Previa cita,Edificio de Posgrado Oficinas 2do piso
+Organización de datos,Ordoñez Parada Ana Isabel,Martes y Jueves,17:00 a 19:00,Virtual
+Organización de datos,Piñón Howlet Laura Cristina,Martes y Jueves,08:00 a 09:00,Sala de Maestros
+Organización de datos,Robles Lozoya Nora,Lunes y Martes,12:00 a 13:00 Presencial; 17:00 a 18:00 Virtual,Edificio Académico cubículo 6; Virtual
+Organización de datos,Sapién Aguilar Alma Lilia,Lunes y Miércoles,08:00 a 09:00,Sala de Maestros
+Organización de datos,Molina Corral Luis Antonio,Martes y Miércoles,09:00 a 10:00,Edificio Académico cubículo 38
+Universidad y Conocimiento,Alvídrez Díaz María del Rosario de Fátima,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 14
+Universidad y Conocimiento,Arroyo Ávila José René,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 15
+Universidad y Conocimiento,Carrillo Ortiz María Guadalupe,Lunes y Viernes,12:00 a 13:00,Edificio Académico cubículo 13
+Universidad y Conocimiento,Chávez Hernández Paul Adrián,Lunes y Jueves,18:00 a 19:00,Edificio Académico cubículo 5
+Universidad y Conocimiento,Flores Ahumada Orieta Iveth,Martes y jueves,11:00 a 12:00,Edificio Académico cubículo 20
+Universidad y Conocimiento,Flores Morales Carmen Romelia,Jueves y Viernes; Lunes Martes y Miércoles,10:00 a 11:00; 12:00 a 13:00,Edificio Académico cubículo 18
+Universidad y Conocimiento,Robles Villa Jesús,Martes y Miércoles,10:00 a 11:00,Edificio Académico cubículo 4
+Universidad y Conocimiento,Caro Lazos Luis Ever,Lunes y Viernes,10:00 a 2:00,Edificio Académico cubículo 34
+Administración de Recursos Humanos,Álvarez Loya Liliana,Martes,14:00 a 15:00,Edificio Académico cubículo 10
+Administración de Recursos Humanos,Alvídrez Díaz María del Rosario de Fátima,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 14
+Administración de Recursos Humanos,Arizmendi Armendáriz Aldo Erubiel,Martes y Viernes,09:00 a 10:00,Edificio Académico cubículo 40
+Administración de Recursos Humanos,Caro Lazos Luis Ever,Lunes a Viernes,10:00 a 14:00,Edificio Académico cubículo 34
+Administración de Recursos Humanos,Carrillo Ortiz María Guadalupe,Lunes y Viernes,12:00 a 13:00,Edificio Académico cubículo 13
+Administración de Recursos Humanos,Córdova González Juan Alejandro,Lunes a Viernes,13:00 a 17:00,Edificio Académico cubículo 40
+Administración de Recursos Humanos,García Bencomo Myrna Isela,Lunes,14:00 a 15:00,Edificio Académico cubículo 34
+Administración de Recursos Humanos,González Terrazas Armando Salustio,Martes y Jueves,12:00 a 13:00,Sala de Maestros
+Administración de Recursos Humanos,Maldonado Iglesias María Guadalupe,Martes y Jueves,08:00 a 09:00,Edificio Académico cubículo 10
+Administración de Recursos Humanos,Pérez Heiras Claudia Patricia,Viernes,12:00 a 14:00,Edificio Académico cubículo 34
+Administración de Recursos Humanos,Rosales Manjarrez Yolanda,Miércoles y Jueves; Lunes Martes y Jueves,13:00 a 14:00 Presencial; 16:00 en delante virtual,Edificio Académico cubículo 21
+Contabilidad de costos,Guzmán Nieves Enriquez,Lunes,16:00 a 18:00,Edificio Académico cubículo 7
+Contabilidad de Costos,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Contabilidad de costos,Torres Ortega Eva Aidé,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 5
+Derecho Laboral,Rocha Acosta José Armado,Viernes,10:00 a 12:00,Edificio Académico cubículo 20
+Ética,Durán Valdez Kenya Cristina,Lunes,18:00 a 19:00,Edificio Académico cubículo 19
+Ética,Caraveo Erives Rosa María,Martes Miércoles y Jueves,14:00 a 15:00,Edificio Académico cubículo 18
+Ética,Córdova González Juan Alejandro,Lunes a Viernes,13:00 a 17:00,Edificio Académico cubículo 40
+Inglés 3,Torres Valdés Consuelo,Miércoles,15:00 a 16:00,Salón 29
+Inglés 3,Loya Martínez Ana Luisa,Viernes,12:00-13:00,Edificio Académico Cubículo 8
+Métodos cuantitativos para la TD I,Viramontes Olivas Oscar Alejandro,Lunes y Jueves,10:00 a 11:00,Edificio Académico cubículo 16
+Métodos cuantitativos para la TD I,Velázquez Pérez Roberto,Lunes,11:00 a 13:00,Edificio Académico cubículo 38
+Negocios por Internet,Anchondo de las Casas Roberto Octavio,Martes y Jueves,08:00 a 09:00,Edificio Académico cubículo 21
+Negocios por Internet,Hernández Perea José Juan,Lunes y Miércoles,14:00 a 15:00,Edificio Académico cubículo 23
+Negocios por Internet,Pérez Tapia Juan Daniel,Martes,15:00 a 18:00,Oficina Comunicación Interna
+Negocios por Internet,Carrera Ramos Mario,Lunes a Viernes,09:00 a 10:00,Edificio Académico cubículo 9
+Negocios por Internet,Martínez Burrola Rubén Roberto,Previa cita,Previa cita,Edificio de Posgrado Oficinas 2do piso
+Negocios por Internet,Piñón Howlet Laura Cristina,Martes y Jueves,08:00 a 09:00,Sala de Maestros
+Negocios por Internet,Sandoval Chaparro Jesús,Martes,08:00 a 09:00,Edificio Académico cubículo 1
+Negocios por Internet,Sapién Aguilar Alma Lilia,Lunes y Miércoles,08:00 a 09:00,Sala de Maestros
+Administración de la Mercadotecnia,Cabrera Zapata Armando Javier,Lunes y Martes,11:00 a 12:00,Edificio Académico cubículo 3
+Administración de la Mercadotecnia,De La Torre Aranda Alfredo,Jueves,18:00 a 20:00,Edificio Académico cubículo 1
+Administración de la Mercadotecnia,García Bencomo Myrna Isela,Lunes,14:00 a 15:00,Edificio Académico cubículo 34
+Administración de la Mercadotecnia,Thompson Gutiérrez Enrique Federico,Jueves,17:00 a 18:00,Edificio Académico cubículo 1
+Derecho Constitucional,Bustillos Varela Xóchitl,Lunes y Martes; Lunes a Jueves,12:00 a 13:00 Presencial; 16:00 a 18:00 Virtual,Edificio Académico cubículo 9
+Estadística Financiera,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Estadística Financiera,Chapa González Héctor Manuel,Miércoles y Viernes,10:00 a 11:00,Edificio Académico cubículo 36
+Estadística Financiera,Varela Delgado Arturo,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 36
+Estructura y Administración del Sector Público,Durán Valdez Kenya Cristina,Lunes,18:00 a 19:00,Edificio Académico cubículo 19
+Estructura y Administración del Sector Público,Villalobos Del Rosal Rodolfo,Lunes a Viernes,10:00 a 11:00,Edificio Académico cubículo 22
+Finanzas,Báez Terrazas César,Lunes,09:00 a 10:00,Edificio Académico cubículo 41
+Finanzas,Boone Salmón Ricardo Alán,Miércoles,16:00 a 18:00,Edificio Académico cubículo 37
+Finanzas,De la Rosa Flores Carlos Cristian,Lunes y Martes,15:00-16:00,Edificio Académico cubículo 17
+Fundamentos de Programación,Alderete Enríquez José Francisco,Jueves,18:00 a 20:00,Sala de Maestros Cubículo 2
+Fundamentos de sistemas,Gutiérrez Diez María de Carmen,Lunes,11:00 a 13:00,Sala de Maestros Cubículo 1
+Inglés 4,Torres Valdés Consuelo,Miércoles,15:00 a 16:00,Salón 29
+Inglés 4,Loya Martínez Ana Luisa,Viernes,12:00-13:00,Edificio Académico Cubículo 8
+Investigación de Mercados,Anchondo de las Casas Roberto Octavio,Martes y Jueves,08:00 a 09:00,Edificio Académico cubículo 21
+Investigación de Mercados,Chávez Hernández Paul Adrián,Lunes y Jueves,18:00 a 19:00,Edificio Académico cubículo 5
+Matemáticas Financieras,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Matemáticas financieras,Juárez Chavira Luis Carlos,Lunes,18:00 a 20:00,Edificio Académico cubículo 39
+Matemáticas Financieras,Ramos Rascón Cristina Liliana,Viernes,9:00 a 11:00,Edificio Académico cubículo 23
+Matemáticas Financieras,Almela Sinecio Omar,Martes,18:00 a 20:00,Edificio Académico cubículo 1
+Matemáticas Financieras,De la Rosa Flores Carlos Cristian,Lunes y Martes,15:00-16:00,Edificio Académico cubículo 17
+Matemáticas Financieras,Báez Terrazas César,Lunes,09:00 a 10:00,Edificio Académico cubículo 41
+Matemáticas Financieras I,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Matemáticas Financieras I,Ramos Rascón Cristina Liliana,Viernes,9:00 a 11:00,Edificio Académico cubículo 23
+Matemáticas Financieras I,Báez Terrazas César,Lunes,09:00 a 10:00,Edificio Académico cubículo 41
+Métodos cuantitativos para la TD II,Viramontes Olivas Oscar Alejandro,Lunes y Jueves,10:00 a 11:00,Edificio Académico cubículo 16
+Microeconomía,Ollivier Fierro Juan Oscar,Lunes y Miércoles,11:00 a 12:00,Edificio Académico cubículo 37
+Microeconomía,Torralba Chávez Efraín,Martes y Miércoles,10:00 a 11:00,Edificio Académico cubículo 41
+Microeconomía,Varela Faudoa Omar Elier,Previa cita,Previa cita,Oficinas FEI
+Nómina integral,Rodríguez Pérez María de Lourdes,Lunes,11:00 a 13:00,Edificio Académico cubículo 35
+Recursos Humanos I,Carrillo Ortiz María Guadalupe,Lunes y Viernes,12:00 a 13:00,Edificio Académico cubículo 13
+Recursos Humanos I,Thompson Gutiérrez Enrique Federico,Jueves,17:00 a 18:00,Edificio Académico cubículo 1
+Recursos Humanos I,Rosas García Blanca Margarita,Martes y Miércoles,14:00 a 15:00,Edificio Académico cubículo 13
+Seguridad Social,Rodríguez Pérez María de Lourdes,Lunes,11:00 a 13:00,Edificio Académico cubículo 35
+Administración de la Compensación y Nómina,Rodríguez Pérez María de Lourdes,Lunes,11:00 a 13:00,Edificio Académico cubículo 35
+Administración de la Producción,Chávez Márquez Irma Leticia,Lunes y Martes,12:00 a 13:00,Edificio Académico cubículo 3
+Administración de la Producción,Domínguez Alcaraz Isidro,Miércoles y Jueves,11:00 a 12:00,Edificio Académico cubículo 22
+Administración de la Producción,Gallegos Murillo Ricardo,Miércoles,18:00 a 20:00,Edificio Académico cubículo 20
+Administración de la Producción,Martínez Lara Héctor,Previa cita,Previa cita,Edificio Académico cubículo 1
+Análisis y diseño de sistemas,Gutiérrez Diez María de Carmen,Lunes,11:00 a 13:00,Sala de Maestros Cubículo 1
+Arquitectura de computadoras,Fraire Rodríguez Marcelino,Lunes,10:00 a 12:00,Edificio Académico cubículo 40
+Comunicación integral de Mercadotecnia y Ventas,Armendáriz Vega Jorge,Martes y Jueves,09:00 a 10:00,Edificio Académico cubículo 18
+Comunicación integral de Mercadotecnia y Ventas,Cabrera Zapata Armando Javier,Lunes y Martes,11:00 a 12:00,Edificio Académico cubículo 3
+Comunicación integral de Mercadotecnia y Ventas,Ogaz Alamillo Mercedes,Lunes y Martes,13:00 a 14:00,Edificio Académico cubículo 35
+Comunicación integral de Mercadotecnia y Ventas,Robles Lozoya Nora,Lunes y Martes,12:00 a 13:00 Presencial; 17:00 a 18:00 Virtual,Edificio Académico cubículo 6; Virtual
+Derecho Administrativo,Rocha Acosta José Armado,Viernes,10:00 a 12:00,Edificio Académico cubículo 20
+Derecho Mercantil,Ramos Ruelas Leonardo,Lunes a Viernes,13:00 a 14:00,Edificio Académico cubículo 23
+Finanzas l,Báez Terrazas César,Lunes,09:00 a 10:00,Edificio Académico cubículo 41
+Finanzas l,Boone Salmón Ricardo Alán,Miércoles,16:00 a 18:00,Edificio Académico cubículo 37
+Finanzas l,Casillas García Jesús Ubaldo,Viernes,16:00 a 18:00,Edificio Académico cubículo 21
+Finanzas l,De la Rocha Ordaz Gabriel,Miércoles,18:00 a 20:00,Edificio Académico cubículo 13
+Laboratorio de Programación,Alderete Enríquez José Francisco,Jueves,18:00 a 20:00,Sala de Maestros Cubículo 2
+Legislación fiscal,Barrera Torres Jesús José,Previa cita,Previa cita,Edificio Académico cubículo 1
+Macroeconomía,Torralba Chávez Efraín,Martes y Miércoles,10:00 a 11:00,Edificio Académico cubículo 41
+Macroeconomía,Varela Faudoa Omar Elier,Previa cita,Previa cita,Oficinas FEI
+Matemáticas Financieras II,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Matemáticas Financieras II,Ramos Rascón Cristina Liliana,Viernes,9:00 a 11:00,Edificio Académico cubículo 23
+Matemáticas Financieras II,Báez Terrazas César,Lunes,09:00 a 10:00,Edificio Académico cubículo 41
+Modelos Econométricos,Varela Delgado Arturo,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 36
+NIF I,Cabrera Ramos Cristina,Previa cita,Previa cita,Edificio Académico cubículo 22
+NIF I,Torres Ortega Eva Aidé,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 5
+NIF I,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Presupuestos para financieros,Prieto Domínguez Diana Gabriela,Lunes y Miércoles,13:00 a 14:00,Edificio Académico cubículo 21
+Procedimientos integrales de costos,Torres Ortega Eva Aidé,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 5
+Publicidad y promoción,Ogaz Alamillo Mercedes,Lunes y Martes,13:00 a 14:00,Edificio Académico cubículo 35
+Recursos Humanos II,Thompson Gutiérrez Enrique Federico,Jueves,17:00 a 18:00,Edificio Académico cubículo 1
+Recursos Humanos II,Álvarez Loya Liliana,Martes,14:00 a 15:00,Edificio Académico cubículo 10
+Recursos Humanos II,De La Torre Aranda Alfredo,Jueves,18:00 a 20:00,Edificio Académico cubículo 1
+Recursos Humanos II,Rosas García Blanca Margarita,Martes y Miércoles,14:00 a 15:00,Edificio Académico cubículo 13
+Administración bancaria,Juárez Chavira Luis Carlos,Lunes,18:00 a 20:00,Edificio Académico cubículo 39
+Álgebra lineal,Alvarez Terrazas Jose Alfonso,Lunes a Viernes,12:00 a 14:00,Edificio Académico cubículo 39
+Álgebra Lineal,Ramos Rascón Cristina Liliana,Viernes,9:00 a 11:00,Edificio Académico cubículo 23
+Compras y abastecimientos,Armendáriz Vega Jorge,Martes y Jueves,09:00 a 10:00,Edificio Académico cubículo 18
+Control Interno,Chávez Valdez Pedro,Lunes,09:00 a 11:00,Sala de Maestros
+Derecho Financiero,Arévalo Mariñelarena Moisés,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 23
+Desarrollo de Capital Humano,De La Torre Aranda Alfredo,Jueves,18:00 a 20:00,Edificio Académico cubículo 1
+Desarrollo de Capital Humano,Flores Fuentes Carmen Gabriela,Jueves,18:00 20:00,Edificio Académico cubículo 21
+Desarrollo de Capital Humano,Ortega Javalera Claudia Esther,Lunes Martes y Miercoles,18:00 a 19:00 PREVIA CITA,Edificio Académico cubículo 1
+Desarrollo de Capital Humano,Parra Almada Cynthia,Lunes a Viernes,13:00 a 14:00,Secretaría de Extensión y Difusión
+Desarrollo de Capital Humano,Prieto Mendoza Verónica,Lunes y Martes,17:00 a 18:00,Edificio Académico cubículo 20
+Desarrollo de Capital Humano,Salcido Garza Servando,Lunes a Miércoles,12:00 a 14:00 y 16:00 a 18:00,Edificio Académico cubículo 2
+Economía Financiera,Ortega Miranda Luis Javier,Sábado,10:00 a 12:00,Edificio Académico cubículo 1
+Entorno comercial latinoamericano,Burciaga Sánchez Brenda Guadalupe,Viernes,11:00 a 13:00,Edificio Académico cubículo 35
+Finanzas II,Juárez Chavira Luis Carlos,Lunes,18:00 a 20:00,Edificio Académico cubículo 39
+Fundamentos de Sistemas Operativos,Martínez Burrola Rubén Roberto,Previa cita,Previa cita,Edificio de Posgrado Oficinas 2do piso
+Impuestos personas morales,Arévalo Mariñelarena Moisés,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 23
+Impuestos personas morales,Barrera Torres Jesús José,Previa cita,Previa cita,Edificio Académico cubículo 1
+Impuestos personas morales,De la Garza Martínez Mario Tomás,Jueves y Viernes,18:00 a 19:00,Edificio Académico cubículo 1
+Impuestos personas morales,Hernández Arenivas Efrén,Martes y Jueves,16:00 a 17:00,Edificio Académico cubículo 33
+Mercado de capitales,Duque Rodríguez Moraima,Lunes,16:00 a 18:00,Edificio Académico cubículo 1
+Mercado de capitales,Rodarte García Rodrigo,Martes,11:00 a 19:00,Edificio Académico cubículo 28
+Modelaje Financiero,Chapa González Héctor Manuel,Miércoles y Viernes,10:00 a 11:00,Edificio Académico cubículo 36
+Modelaje Financiero,De la Rosa Flores Carlos Cristian,Lunes y Martes,15:00-16:00,Edificio Académico cubículo 17
+Modelaje Financiero,Velasco Alfredo Roberto,Miércoles,15:00 a 17:00,Edificio Académico cubículo 4
+NIF II,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Planeación Financiera,Almela Sinecio Omar,Martes,18:00 a 20:00,Edificio Académico cubículo 1
+Planeación Financiera,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Presupuestos,Carnero Porras Jorge Luis,Martes,10:00 a 12:00,Virtual
+Presupuestos,Flores García Mauro Alberto,Miércoles,12:00 a 14:00,Edificio Académico cubículo 36
+Presupuestos,Prieto Domínguez Diana Gabriela,Lunes y Miércoles,13:00 a 14:00,Edificio Académico cubículo 21
+Presupuestos,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Programación orientada a objetos,Alderete Enríquez José Francisco,Jueves,18:00 a 20:00,Sala de Maestros Cubículo 2
+Pronóstico para la Toma de Decisiones,Varela Delgado Arturo,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 36
+Pronóstico para la Toma de Decisiones,Velasco Alfredo Roberto,Miércoles,15:00 a 17:00,Edificio Académico cubículo 4
+Verificación y Validación de Software,Gutiérrez García Juan Javier,Lunes y Miércoles,18:00 a 19:00,Edificio Académico cubículo 22
+A.V.P.I.,Almela Sinecio Omar,Martes,18:00 a 20:00,Edificio Académico cubículo 1
+A.V.P.I.,Bordas Beltrán José Luis,Lunes,17:00 a 19:00,Edificio Académico cubículo 1
+Administración de las operaciones y normatividad de TI,Fraire Rodríguez Marcelino,Lunes,10:00 a 12:00,Edificio Académico cubículo 40
+Administración de proyectos,Arroyo Ávila José René,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 15
+Administración de Sistemas Operativos,Joannis Ortíz León Antonio,Viernes,16:00 a 18:00,Edificio Académico cubículo 9
+Análisis e interpretación de Estados Financieros,Boone Salmón Ricardo Alán,Miércoles,16:00 a 18:00,Edificio Académico cubículo 37
+Análisis e interpretación de Estados Financieros,De la Rocha Ordaz Gabriel,Miércoles,18:00 a 20:00,Edificio Académico cubículo 13
+Análisis e interpretación de Estados Financieros,Ortega Miranda Luis Javier,Sábado,10:00 a 12:00,Edificio Académico cubículo 1
+Auditoría administrativa,Álvarez Loya Liliana,Martes,14:00 a 15:00,Edificio Académico cubículo 10
+Auditoría administrativa,Méndez González José Emilio,Martes y Miércoles,15:00 a 16:00,Edificio Académico cubículo 8
+Auditoría administrativa,Prieto Mendoza Verónica,Lunes y Martes,17:00 a 18:00,Edificio Académico cubículo 20
+Auditoría administrativa,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Auditoría básica,De la Rocha Ordaz Gabriel,Miércoles,18:00 a 20:00,Edificio Académico cubículo 13
+Auditoría básica,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+AVPI,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Contabilidad de Sociedades,Torres Ortega Eva Aidé,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 5
+Entorno comercial internacional,Burciaga Sánchez Brenda Guadalupe,Viernes,11:00 a 13:00,Edificio Académico cubículo 35
+Estructura de Capital,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Finanzas Públicas,Casillas García Jesús Ubaldo,Viernes,16:00 a 18:00,Edificio Académico cubículo 21
+Impuestos personas físicas,Arévalo Mariñelarena Moisés,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 23
+Impuestos personas físicas,Barrera Torres Jesús José,Previa cita,Previa cita,Edificio Académico cubículo 1
+Impuestos personas físicas,De la Garza Martínez Mario Tomás,Jueves y Viernes,18:00 a 19:00,Edificio Académico cubículo 1
+Impuestos personas físicas,Hernández Arenivas Efrén,Martes y Jueves,16:00 a 17:00,Edificio Académico cubículo 33
+Inglés Técnico LAF,De la Rocha Ordaz Gabriel,Miércoles,18:00 a 20:00,Edificio Académico cubículo 13
+Instrumentos Derivados,Varela Delgado Arturo,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 36
+Instrumentos Derivados,Maria de la Luz Estrada Ramirez,Martes Jueves y Viernes,17:00 a 18:00,Sala de Maestros
+Mercado de dinero y valuación de activos financieros,Duque Rodríguez Moraima,Lunes,16:00 a 18:00,Edificio Académico cubículo 1
+Mercadotecnia internacional,Arizmendi Armendáriz Aldo Erubiel,Martes y Viernes,09:00 a 10:00,Edificio Académico cubículo 40
+Mercadotecnia internacional,Chávez Hernández Paul Adrián,Lunes y Jueves,18:00 a 19:00,Edificio Académico cubículo 5
+Mercadotecnia internacional,De La Torre Aranda Alfredo,Jueves,18:00 a 20:00,Edificio Académico cubículo 1
+Mercadotecnia internacional,Prieto Mendoza Verónica,Lunes y Martes,17:00 a 18:00,Edificio Académico cubículo 20
+NIF III,De la Garza Martínez Mario Tomás,Jueves y Viernes,18:00 a 19:00,Edificio Académico cubículo 1
+Normas Internacionales de Información Financiera,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Programación Web,Gutiérrez García Juan Javier,Lunes y Miércoles,18:00 a 19:00,Edificio Académico cubículo 22
+Redes y Comunicaciones II,Alderete Enríquez José Francisco,Jueves,18:00 a 20:00,Sala de Maestros Cubículo 2
+Seminario de Recursos Humanos,De La Torre Aranda Alfredo,Jueves,18:00 a 20:00,Edificio Académico cubículo 1
+Seminario de Recursos Humanos,Domínguez Cázares María Isabel,Lunes a Viernes,11:00 a 12:00,Edificio Académico cubículo 10
+Seminario de Recursos Humanos,Parra Almada Cynthia,Lunes a Viernes,13:00 a 14:00,Secretaría de Extensión y Difusión
+Seminario de recursos Humanos,Salcido Garza Servando,Lunes a Miércoles,12:00 a 14:00 y 16:00 a 18:00,Edificio Académico cubículo 2
+Auditoría Superior,Terrazas Cano José Conrado,Lunes,15:00 a 17:00,Edificio Académico cubículo 23
+Auditoría Superior,Varela Lazo Javier Armando,Martes y Jueves,17:00 a 18:00,Edificio Académico cubículo 41
+Capacitación certificación AMIB,Varela Delgado Arturo,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 36
+Dirección Estratégica,Arreola Serrano Miguel Ángel,Martes,16:00 a 18:00,Edificio Académico cubículo 9
+Dirección Estratégica,Arroyo Ávila José René,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 15
+Dirección Estratégica,Ortega Miranda Luis Javier,Sábado,10:00 a 12:00,Edificio Académico cubículo 1
+Dirección Estratégica,Prieto Mendoza Verónica,Lunes y Martes,17:00 a 18:00,Edificio Académico cubículo 20
+Dirección Estratégica,Salcido Garza Servando,Lunes a Miércoles,12:00 a 14:00 y 16:00 a 18:00,Edificio Académico cubículo 2
+Incubadora de empresas,Arroyo Ávila José René,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 15
+Administración de Inversiones,Varela Delgado Arturo,Lunes y Miércoles,17:00 a 18:00,Edificio Académico cubículo 36
+Administración de la PyME,Guzmán Nieves Enrique,Lunes,16:00 a 18:00,Edificio Académico cubículo 7
+Administración de la PyME,Méndez González José Emilio,Martes y Miércoles,15:00 a 16:00,Edificio Académico cubículo 8
+Clima organizacional,Bordas Beltrán José Luis,Lunes,17:00 a 19:00,Edificio Académico cubículo 1
+Consultoría de empresas,Varela Faudoa Omar Elier,Previa cita,Previa cita,Oficinas FEI
+Ergonomía,Alvídrez Díaz María del Rosario de Fátima,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 14
+Excel para los Negocios,Pérez Tapia Juan Daniel,Martes,15:00 a 18:00,Oficina Comunicación Interna
+Formación e Información Tributaria,Espino Balderra Juan Josué,Jueves,16:00 a 18:00,Edificio Académico cubículo 1
+Gestión de exportación,Burciaga Sánchez Brenda Guadalupe,Viernes,11:00 a 13:00,Edificio Académico cubículo 35
+Gestión del talento,Martínez Burrola Rubén Roberto,Previa cita,Previa cita,Edificio de Posgrado Oficinas 2do piso
+Gestión del talento,Molina Corral Luis Antonio,Miércoles,18:00 a 19:00,Virtual
+Imagen y profesión,Alvídrez Díaz María del Rosario de Fátima,Martes y Jueves,12:00 a 13:00,Edificio Académico cubículo 14
+Liderazgo y Formación Directiva,Chávez Hernández Paul Adrián,Lunes y Jueves,18:00 a 19:00,Edificio Académico cubículo 5
+Mercado de valores,Duque Rodríguez Moraima,Lunes,16:00 a 18:00,Edificio Académico cubículo 1
+Mercado de valores,Rodarte García Rodrigo,Martes,11:00 a 19:00,Edificio Académico cubículo 28
+Mercado de valores,Torralba Chávez Efraín,Martes y Miércoles,10:00 a 11:00,Edificio Académico cubículo 41
+Metodología de la investigación,González Moreno Sonia Esther,Viernes,11:00 a 13:00,Edificio académico Cubículo 26
+Planeación Financiera Estratégica,Santini Esparza Víctor Manuel,Lunes a Viernes,11:00 a 13:00,Edificio Académico cubículo 32
+Planeación Fiscal Integral,De la Garza Martínez Mario Tomás,Jueves y Viernes,18:00 a 19:00,Edificio Académico cubículo 1
+Planeación Fiscal Integral,Espino Balderra Juan Josué,Jueves,16:00 a 18:00,Edificio Académico cubículo 1
+Seguros y fianzas,Casillas García Jesús Ubaldo,Viernes,16:00 a 18:00,Edificio Académico cubículo 21
+Seminario de Contabilidades especiales,Terrazas Cano José Conrado,Lunes,15:00 a 17:00,Edificio Académico cubículo 23
+Seminario de Impuestos,Barrera Torres Jesús José,Previa cita,previa cita,Edificio Académico cubículo 1
+Seminario de Investigación,González Moreno Sonia Esther,Viernes,11:00 a 13:00,Edificio académico Cubículo 26
+Seminario de Investigación,Ollivier Fierro Juan Oscar,Lunes y Miércoles,11:00 a 12:00,Edificio Académico cubículo 37
+Seminario Integrador de Negocios II,Guzmán Ibarra Luz Elena,Lunes y Miércoles,12:00 a 13:00,Edificio Académico cubículo 27
+Taller de Negociación Internacional,Prieto Mendoza Verónica,Lunes y Martes,17:00 a 18:00,Edificio Académico cubículo 20
+Seminario de Investigación,Guzmán Ibarra Luz Elena,Lunes y Miércoles,11:00 a 12:00,Edificio Académico cubículo 27
+Metodología de la investigación,Guzmán Ibarra Luz Elena,Lunes y Miércoles,11:00 a 12:00,Edificio Académico cubículo 27
+Metodología de la investigación,Torralba Chávez Efraín,Martes y Miércoles,10:00 a 11:00,Edificio Académico cubículo 41
+Metodología de la investigación,Flores Morales Carmen Romelia,Jueves y Viernes; Lunes Martes y Miércoles,10:00 a 11:00; 12:00 a 13:00,Edificio Académico cubículo 18
