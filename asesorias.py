@@ -13,12 +13,13 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 client = OpenAI(api_key=st.secrets["api_key"])
 
 # 1. Carga de datos de tutores
+@st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
-tutores = st.cache_data(ttl=3600)(cargar_tutores)()
+tutores = cargar_tutores()
 
 # 2. Preparación del índice semántico (embedding de materias)
 @st.cache_resource
@@ -38,24 +39,23 @@ def preparar_indice(tutores):
 index = preparar_indice(tutores)
 
 # 3. Historial conversacional
-def init_history():
-    return [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
-
 if "history" not in st.session_state:
-    st.session_state.history = init_history()
+    st.session_state.history = [
+        {"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}
+    ]
 
 # Mostrar historial previo
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 4. Input del alumno
+# 4. Función de búsqueda
 def buscar_tutores(consulta, k=3):
-    # 4.1. Búsqueda exacta por nombre de materia
+    # Búsqueda exacta por nombre de materia
     exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
     if exact:
         return exact[:k]
-    # 4.2. Búsqueda semántica fallback
+    # Búsqueda semántica fallback
     q_emb = client.embeddings.create(
         model="text-embedding-ada-002",
         input=consulta
@@ -63,6 +63,7 @@ def buscar_tutores(consulta, k=3):
     D, I = index.search(np.array([q_emb], dtype="float32"), k=k)
     return [tutores[i] for i in I[0]]
 
+# 5. Entrada del alumno
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     # Guardar mensaje de usuario
@@ -75,10 +76,12 @@ if consulta:
     st.subheader("Profesores recomendados:")
     for t in recomendados:
         st.markdown(
-            f"**{t['maestro']}** – _{t['materia']}_  
-             📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}")
+            f"**{t['maestro']}** – _{t['materia']}_  \n"
+            f"📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}"
+        )
 
     # Propuesta de interacción adicional
-    st.session_state.history.append({"role": "assistant", "content": "¿En qué más te puedo ayudar?"})
+    respuesta = "¿En qué más te puedo ayudar?"
+    st.session_state.history.append({"role": "assistant", "content": respuesta})
     with st.chat_message("assistant"):
-        st.write("¿En qué más te puedo ayudar?")
+        st.write(respuesta)
