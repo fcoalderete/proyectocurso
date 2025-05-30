@@ -1,35 +1,47 @@
 import streamlit as st
 import pandas as pd
-from openai import OpenAI
+from openai import OpenAI, error as openai_error
 import faiss
 import numpy as np
 
-# Título y configuración inicial
+# 0. Configuración inicial
 st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
 st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
 st.subheader("Consulta tutorías por materia y recibe recomendaciones personalizadas de profesores y horarios.")
 
-# Cliente de OpenAI
-client = OpenAI(api_key=st.secrets["api_key"])
+# Cliente de OpenAI y validación de clave
+try:
+    api_key = st.secrets["api_key"]
+    if not api_key:
+        raise KeyError
+    client = OpenAI(api_key=api_key)
+except KeyError:
+    st.error("Clave de OpenAI no encontrada. Asegúrate de definir 'api_key' en .streamlit/secrets.toml o en Secrets de Streamlit Cloud.")
+    st.stop()
 
 # 1. Carga de datos de tutores
-@st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
+@st.cache_data(ttl=3600)
 tutores = cargar_tutores()
 
-# 2. Preparación del índice semántico (embedding de materias)
+# 2. Preparación del índice semántico
 @st.cache_resource
 def preparar_indice(tutores):
     embs = []
     for t in tutores:
-        emb = client.embeddings.create(
-            model="text-embedding-ada-002",
-            input=t["materia"]
-        ).data[0].embedding
+        try:
+            resp = client.embeddings.create(model="text-embedding-ada-002", input=t["materia"])
+            emb = resp.data[0].embedding
+        except openai_error.AuthenticationError:
+            st.error("Error de autenticación con OpenAI. Verifica tu API key.")
+            st.stop()
+        except Exception as e:
+            st.error(f"Error generando embeddings: {e}")
+            st.stop()
         embs.append(emb)
     arr = np.array(embs, dtype="float32")
     index = faiss.IndexFlatL2(arr.shape[1])
@@ -40,47 +52,47 @@ index = preparar_indice(tutores)
 
 # 3. Historial conversacional
 if "history" not in st.session_state:
-    st.session_state.history = [
-        {"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}
-    ]
+    st.session_state.history = [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
 
-# Mostrar historial previo
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 4. Función de búsqueda
+# 4. Función de búsqueda (exacta y semántica)
 def buscar_tutores(consulta, k=3):
-    # Búsqueda exacta por nombre de materia
+    # Búsqueda exacta
     exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
     if exact:
         return exact[:k]
-    # Búsqueda semántica fallback
-    q_emb = client.embeddings.create(
-        model="text-embedding-ada-002",
-        input=consulta
-    ).data[0].embedding
+    # Búsqueda semántica
+    try:
+        q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
+        q_emb = q_resp.data[0].embedding
+    except openai_error.AuthenticationError:
+        st.error("Error de autenticación al buscar embeddings de la consulta.")
+        st.stop()
+    except Exception as e:
+        st.error(f"Error en búsqueda semántica: {e}")
+        st.stop()
     D, I = index.search(np.array([q_emb], dtype="float32"), k=k)
     return [tutores[i] for i in I[0]]
 
-# 5. Entrada del alumno
+# 5. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
-    # Guardar mensaje de usuario
     st.session_state.history.append({"role": "user", "content": consulta})
     with st.chat_message("user"):
         st.write(consulta)
 
-    # Buscar y formatear recomendaciones
     recomendados = buscar_tutores(consulta)
     st.subheader("Profesores recomendados:")
     for t in recomendados:
         st.markdown(
-            f"**{t['maestro']}** – _{t['materia']}_  \n"
-            f"📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}"
+            f"**{t['maestro']}**  
+             _{t['materia']}_  
+             📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}"
         )
 
-    # Propuesta de interacción adicional
     respuesta = "¿En qué más te puedo ayudar?"
     st.session_state.history.append({"role": "assistant", "content": respuesta})
     with st.chat_message("assistant"):
