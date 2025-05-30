@@ -117,23 +117,37 @@ for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 6. Función de búsqueda mejorada
+# 6. Función de búsqueda mejorada (tokenizada + substring)
 
 def buscar_tutores(consulta):
     norm = normalize_text(consulta)
     matches = []
     for t in tutores:
-        mat = normalize_text(t['materia'])
-        tokens = mat.replace('-', ' ').split()
-        # Coincidencia exacta de palabra o prefijo
-        if norm in tokens or any(token.startswith(norm) for token in tokens):
+        mat_norm = normalize_text(t['materia'])
+        # Crear tokens separando por espacios y puntuación básica
+        tokens = [tok for tok in mat_norm.replace('-', ' ').replace(',', ' ').split()]
+        # Coincidencia exacta de palabra
+        if norm in tokens:
             matches.append(t)
-    # Si no hay matches tokenizados, fallback a substring en toda la materia
-    if not matches:
-        matches = [t for t in tutores if norm in normalize_text(t['materia'])]
-    return matches
+            continue
+        # Coincidencia por prefijo en tokens
+        if any(tok.startswith(norm) for tok in tokens):
+            matches.append(t)
+            continue
+        # Substring fallback en toda la materia
+        if norm in mat_norm:
+            matches.append(t)
+    # Eliminar duplicados manteniendo orden
+    seen = set()
+    unique = []
+    for t in matches:
+        key = (t['materia'], t['maestro'])
+        if key not in seen:
+            unique.append(t)
+            seen.add(key)
+    return unique
 
-# 7. Input y salida en chat
+# 7. Input y salida en chat Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role": "user", "content": consulta})
