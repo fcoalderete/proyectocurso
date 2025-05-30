@@ -1,49 +1,48 @@
 import streamlit as st
 import pandas as pd
-from openai import OpenAI, error as openai_error
-import faiss
 import numpy as np
+import faiss
+import openai
+from openai import OpenAI
+from openai.error import AuthenticationError
 
 # 0. Configuración inicial
 st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
 st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
 st.subheader("Consulta tutorías por materia y recibe recomendaciones personalizadas de profesores y horarios.")
 
-# Cliente de OpenAI y validación de clave
-try:
-    api_key = st.secrets.get("api_key", None)
-    if not api_key:
-        raise KeyError
-    client = OpenAI(api_key=api_key)
-except KeyError:
+# 1. Validación y cliente de OpenAI
+api_key = st.secrets.get("api_key")
+if not api_key:
     st.error("Clave de OpenAI no encontrada. Define 'api_key' en .streamlit/secrets.toml o en Secrets de Streamlit Cloud.")
     st.stop()
+client = OpenAI(api_key=api_key)
 
-# 1. Carga de datos de tutores
-@st.cache_data(ttl=3600)
+# 2. Carga de datos de tutores
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
+@st.cache_data(ttl=3600)
 # Carga efectiva
+
 tutores = cargar_tutores()
 
-# 2. Preparación del índice semántico
+# 3. Preparación del índice semántico
 @st.cache_resource
 def preparar_indice(data):
     embs = []
     for t in data:
         try:
             resp = client.embeddings.create(model="text-embedding-ada-002", input=t["materia"])
-            emb = resp.data[0].embedding
-        except openai_error.AuthenticationError:
+            embs.append(resp.data[0].embedding)
+        except AuthenticationError:
             st.error("Error de autenticación con OpenAI. Verifica tu API key.")
             st.stop()
         except Exception as e:
             st.error(f"Error generando embeddings: {e}")
             st.stop()
-        embs.append(emb)
     arr = np.array(embs, dtype="float32")
     index = faiss.IndexFlatL2(arr.shape[1])
     index.add(arr)
@@ -52,7 +51,7 @@ def preparar_indice(data):
 # Índice instanciado
 index = preparar_indice(tutores)
 
-# 3. Historial conversacional
+# 4. Historial conversacional
 if "history" not in st.session_state:
     st.session_state.history = [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
 
@@ -61,17 +60,17 @@ for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 4. Función de búsqueda (exacta y semántica)
+# 5. Función de búsqueda (exacta y semántica)
 def buscar_tutores(consulta, k=3):
-    # Búsqueda exacta por coincidencia de nombre de materia
+    # Búsqueda exacta
     exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
     if exact:
         return exact[:k]
-    # Si no hay exactas, búsqueda semántica
+    # Si no hay coincidencias exactas, búsqueda semántica
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
-    except openai_error.AuthenticationError:
+    except AuthenticationError:
         st.error("Error de autenticación al buscar embeddings.")
         st.stop()
     except Exception as e:
@@ -80,10 +79,10 @@ def buscar_tutores(consulta, k=3):
     D, I = index.search(np.array([q_emb], dtype="float32"), k=k)
     return [tutores[i] for i in I[0]]
 
-# 5. Input y salida en chat
+# 6. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
-    # Agregar mensaje de usuario al historial
+    # Añadir mensaje del usuario al historial
     st.session_state.history.append({"role": "user", "content": consulta})
     with st.chat_message("user"):
         st.write(consulta)
