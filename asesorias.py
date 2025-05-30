@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import faiss
-import openai
 from openai import OpenAI
 from openai.error import AuthenticationError
 
@@ -19,12 +18,12 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 # 2. Carga de datos de tutores
+@st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
-@st.cache_data(ttl=3600)
 # Carga efectiva
 tutores = cargar_tutores()
 
@@ -65,7 +64,7 @@ def buscar_tutores(consulta, k=3):
     exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
     if exact:
         return exact[:k]
-    # Si no hay coincidencias exactas, búsqueda semántica
+    # Búsqueda semántica
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
