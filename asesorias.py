@@ -1,4 +1,4 @@
-# Version 1.1: Removed semantic fallback; using only substring matching for tutor lookup.
+# Version 1.2: Added sidebar with contact info and logos
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -7,14 +7,39 @@ import openai
 from openai import OpenAI
 import unicodedata
 
-# Version history:
-# 1.0 - Initial implementation with substring and semantic fallback.
-# 1.1 - Removed semantic fallback to prevent irrelevant matches; now only substring search.
-
 # 0. Configuración inicial
 st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
+
+# Sidebar con logos e información de contacto
+def setup_sidebar():
+    with st.sidebar:
+        # Logos
+        st.image("escudo-texto-color.png", use_column_width=True)
+        st.image("fca-escudo.png", use_column_width=True)
+        st.markdown("---")
+        # FCA
+        st.header("Facultad de Contaduría y Administración")
+        st.write("Circuito Universitario Campus II")
+        st.write("Tel. +52 (614) 442 0000")
+        st.write("Chihuahua, Chih. México")
+        st.markdown("---")
+        # UACH
+        st.header("Universidad Autónoma de Chihuahua")
+        st.write("C. Escorza 900, Col. Centro 31000")
+        st.write("Tel. +52 (614) 439 1500")
+        st.write("Chihuahua, Chih. México")
+        st.markdown("---")
+        st.write("**Realizado por Francisco Aldrete**")
+
+setup_sidebar()
+
 st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
 st.subheader("Consulta tutorías por materia y recibe recomendaciones personalizadas de profesores y horarios.")
+
+# Version history:
+# 1.0 - Initial implementation with substring and semantic fallback.
+# 1.1 - Removed semantic fallback; only substring search.
+# 1.2 - Added sidebar with contact info and logos.
 
 # 1. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
@@ -23,18 +48,20 @@ if not api_key:
     st.stop()
 client = OpenAI(api_key=api_key)
 
-# 2. Carga de datos de tutores
+# Función de normalización de texto
 def normalize_text(s):
     nkfd = unicodedata.normalize('NFKD', s)
     return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
 
-@st.cache_data(ttl=3600)
+# 2. Carga de datos de tutores
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
+@st.cache_data(ttl=3600)
+# Carga efectiva
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
@@ -82,18 +109,13 @@ if consulta:
         st.info("Sin embargo, puedo ayudarte con otras dudas o brindarte más información.")
 
     # Conversación adicional con IA
-    try:
-        stream = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=st.session_state.history,
-            max_tokens=800,
-            temperature=0
-        )
-        ia_resp = stream.choices[0].message.content
-    except Exception as e:
-        st.error(f"Error generando respuesta de chat: {e}")
-        st.stop()
-
+    stream = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=st.session_state.history,
+        max_tokens=800,
+        temperature=0
+    )
+    ia_resp = stream.choices[0].message.content
     st.session_state.history.append({"role": "assistant", "content": ia_resp})
     with st.chat_message("assistant"):
         st.write(ia_resp)
