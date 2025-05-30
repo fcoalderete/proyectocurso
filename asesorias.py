@@ -119,23 +119,31 @@ if consulta:
     with st.chat_message("user"):
         st.write(consulta)
 
-    recomendados = buscar_tutores(consulta)
+    # Mostrar spinner mientras busca tutores
+    with st.spinner("🔍 Buscando profesores..."):
+        recomendados = buscar_tutores(consulta)
+
     if recomendados:
+        st.markdown("---")
         st.subheader("Profesores recomendados:")
         for t in recomendados:
             line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
             st.markdown(line)
     else:
+        st.markdown("---")
         st.warning("No hay maestro asesor disponible para esa materia.")
         st.info("Sin embargo, puedo ayudarte con otras dudas o brindarte más información.")
 
-    stream = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=st.session_state.history,
-        max_tokens=800,
-        temperature=0
-    )
-    ia_resp = stream.choices[0].message.content
+    # Conversación adicional con IA con spinner de espera
+    with st.spinner("⌛ Generando respuesta de IA..."):
+        stream = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=st.session_state.history,
+            max_tokens=800,
+            temperature=0
+        )
+        ia_resp = stream.choices[0].message.content
+
     st.session_state.history.append({"role": "assistant", "content": ia_resp})
     with st.chat_message("assistant"):
         st.write(ia_resp)
