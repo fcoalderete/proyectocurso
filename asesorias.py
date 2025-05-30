@@ -69,13 +69,14 @@ def normalize_text(s):
     return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
 
 # 2. Carga de datos de tutores
+@st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df_local = pd.read_csv(path)
     df_local = df_local.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     df_local.columns = [c.strip().lower() for c in df_local.columns]
     return df_local.to_dict(orient="records")
 
-@st.cache_data(ttl=3600)
+# Carga efectiva
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
