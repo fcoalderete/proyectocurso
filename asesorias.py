@@ -4,18 +4,23 @@ from openai import OpenAI
 import faiss
 import numpy as np
 
-# 0. Configuración inicial
-st.set_page_config("🤖 Asesor IA de Tutorías", layout="wide")
+# Título y configuración inicial
+st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
+st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
+st.subheader("Consulta tutorías por materia y recibe recomendaciones personalizadas de profesores y horarios.")
+
+# Cliente de OpenAI
 client = OpenAI(api_key=st.secrets["api_key"])
 
-# 1. Carga de datos
-@st.cache_data(ttl=3600)
+# 1. Carga de datos de tutores
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
-# 2. Preparación del índice semántico
+tutores = st.cache_data(ttl=3600)(cargar_tutores)()
+
+# 2. Preparación del índice semántico (embedding de materias)
 @st.cache_resource
 def preparar_indice(tutores):
     embs = []
@@ -30,51 +35,50 @@ def preparar_indice(tutores):
     index.add(arr)
     return index
 
-# Inicialización
-tutores = cargar_tutores()
 index = preparar_indice(tutores)
 
 # 3. Historial conversacional
-if "history" not in st.session_state:
-    st.session_state.history = [
-        {"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}
-    ]
+def init_history():
+    return [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
 
-# Mostrar mensajes previos
+if "history" not in st.session_state:
+    st.session_state.history = init_history()
+
+# Mostrar historial previo
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 4. Entrada del alumno
-consulta = st.chat_input("¿En qué tema necesitas asesoría?")
-if consulta:
-    # Añadir mensaje del usuario
-    st.session_state.history.append({"role": "user", "content": consulta})
-    with st.chat_message("user"):
-        st.write(consulta)
-
-    # 5. Búsqueda semántica
+# 4. Input del alumno
+def buscar_tutores(consulta, k=3):
+    # 4.1. Búsqueda exacta por nombre de materia
+    exact = [t for t in tutores if consulta.lower() in t["materia"].lower()]
+    if exact:
+        return exact[:k]
+    # 4.2. Búsqueda semántica fallback
     q_emb = client.embeddings.create(
         model="text-embedding-ada-002",
         input=consulta
     ).data[0].embedding
-    D, I = index.search(np.array([q_emb], dtype="float32"), k=3)
+    D, I = index.search(np.array([q_emb], dtype="float32"), k=k)
+    return [tutores[i] for i in I[0]]
 
-    # Formatear recomendaciones
-    recomendaciones = []
-    for i in I[0]:
-        t = tutores[i]
-        recomendaciones.append(
-            f"- **{t['maestro']}** ({t['materia']}): {t['días']} · {t['hora']} · {t['lugar']}"
-        )
+consulta = st.chat_input("¿En qué materia necesitas asesoría?")
+if consulta:
+    # Guardar mensaje de usuario
+    st.session_state.history.append({"role": "user", "content": consulta})
+    with st.chat_message("user"):
+        st.write(consulta)
 
-    respuesta = (
-        "Según tu consulta semántica, te recomiendo estos profesores:\n\n"
-        + "\n".join(recomendaciones)
-        + "\n\n¿En qué más te puedo ayudar?"
-    )
+    # Buscar y formatear recomendaciones
+    recomendados = buscar_tutores(consulta)
+    st.subheader("Profesores recomendados:")
+    for t in recomendados:
+        st.markdown(
+            f"**{t['maestro']}** – _{t['materia']}_  
+             📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}")
 
-    # Mostrar respuesta del asistente
-    st.session_state.history.append({"role": "assistant", "content": respuesta})
+    # Propuesta de interacción adicional
+    st.session_state.history.append({"role": "assistant", "content": "¿En qué más te puedo ayudar?"})
     with st.chat_message("assistant"):
-        st.markdown(respuesta)
+        st.write("¿En qué más te puedo ayudar?")
