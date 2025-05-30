@@ -1,4 +1,4 @@
-# Version 1.4: Handle missing logo files safely in sidebar
+# Version 1.5: Replace deprecated use_column_width, center logos, size adjustments
 import os
 import streamlit as st
 import pandas as pd
@@ -14,14 +14,19 @@ st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de 
 # Sidebar con logos e información de contacto
 def setup_sidebar():
     with st.sidebar:
-        # Logo FCA (texto color)
+        # Primer logo: escala al ancho de contenedor
         if os.path.exists("escudo-texto-color.png"):
-            st.image("escudo-texto-color.png", use_column_width=True)
+            st.image("escudo-texto-color.png", use_container_width=True)
         else:
             st.write("**[Logo FCA no disponible]**")
-        # Logo Escudo
+        # Segundo logo: centrado y con ancho fijo
         if os.path.exists("fca-escudo.png"):
-            st.image("fca-escudo.png", use_column_width=True)
+            st.markdown(
+                "<div style='text-align: center;'>"
+                "<img src='fca-escudo.png' width='150'/>"
+                "</div>",
+                unsafe_allow_html=True
+            )
         else:
             st.write("**[Logo UACH no disponible]**")
         st.markdown("---")
@@ -41,6 +46,7 @@ def setup_sidebar():
 
 setup_sidebar()
 
+# Título y subtítulo de la aplicación
 st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
 st.subheader("Consulta tutorías por materia y recibe recomendaciones personalizadas de profesores y horarios.")
 
@@ -49,7 +55,8 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 # 1.1 - Removed semantic fallback.
 # 1.2 - Added sidebar.
 # 1.3 - Fixed decorator placement for cargar_tutores caching.
-# 1.4 - Handle missing logo files in sidebar.
+# 1.4 - Handled missing logo files in sidebar.
+# 1.5 - Replaced use_column_width; centered and resized logos.
 
 # 1. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
