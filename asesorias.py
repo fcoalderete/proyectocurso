@@ -26,7 +26,6 @@ def cargar_tutores(path="tutores.csv"):
 
 @st.cache_data(ttl=3600)
 # Carga efectiva
-
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
@@ -94,8 +93,23 @@ if consulta:
         line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
         st.markdown(line)
 
-    # Pregunta de seguimiento
-    respuesta = "¿En qué más te puedo ayudar?"
-    st.session_state.history.append({"role": "assistant", "content": respuesta})
+    # Llamada al chat de OpenAI para conversación adicional
+    try:
+        stream = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=st.session_state.history,
+            max_tokens=800,
+            temperature=0
+        )
+        ia_resp = stream.choices[0].message.content
+    except AuthenticationError:
+        st.error("Error de autenticación al generar respuesta de chat.")
+        st.stop()
+    except Exception as e:
+        st.error(f"Error en llamada de chat completions: {e}")
+        st.stop()
+
+    # Mostrar respuesta de IA
+    st.session_state.history.append({"role": "assistant", "content": ia_resp})
     with st.chat_message("assistant"):
-        st.write(respuesta)
+        st.write(ia_resp)
