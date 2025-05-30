@@ -1,4 +1,4 @@
-# Version 1.8: Use st.image within centered columns for both logos; add borders via CSS in markdown before images
+# Version 1.9: Mejorar búsqueda tokenizada y por prefijo para materias
 import os
 import streamlit as st
 import pandas as pd
@@ -77,6 +77,7 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 # 1.6 - Use st.image within columns to center second logo and avoid HTML.
 # 1.7 - Removed balloons; added dividers and frames.
 # 1.8 - Refined centering and borders for both logos with st.image in columns.
+# 1.9 - Mejorada búsqueda tokenizada y por prefijo para materias.
 
 # 2. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
@@ -116,13 +117,21 @@ for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 6. Función de búsqueda (solo substring) - mostrar todos los matches
+# 6. Función de búsqueda mejorada
 
 def buscar_tutores(consulta):
     norm = normalize_text(consulta)
-    # Encontrar todas las materias que contienen la consulta
-    sub_matches = [t for t in tutores if norm in normalize_text(t['materia'])]
-    return sub_matches
+    matches = []
+    for t in tutores:
+        mat = normalize_text(t['materia'])
+        tokens = mat.replace('-', ' ').split()
+        # Coincidencia exacta de palabra o prefijo
+        if norm in tokens or any(token.startswith(norm) for token in tokens):
+            matches.append(t)
+    # Si no hay matches tokenizados, fallback a substring en toda la materia
+    if not matches:
+        matches = [t for t in tutores if norm in normalize_text(t['materia'])]
+    return matches
 
 # 7. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
@@ -131,7 +140,6 @@ if consulta:
     with st.chat_message("user"):
         st.write(consulta)
 
-    # Búsqueda en CSV
     with st.spinner("🔍 Buscando profesores..."):
         recomendados = buscar_tutores(consulta)
 
@@ -141,12 +149,10 @@ if consulta:
         for t in recomendados:
             line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
             st.markdown(line)
-        # Sugerencia de ayuda adicional via IA
         st.markdown("---")
         st.info("¿Necesitas más ayuda o detalles específicos? Escribe tu pregunta para recibir asistencia de IA.")
     else:
         st.warning("No hay maestro asesor disponible para esa materia.")
-        # Llamada a IA si no hay resultados en CSV
         with st.spinner("⌛ Generando respuesta de IA..."):
             stream = client.chat.completions.create(
                 model="gpt-4o-mini",
