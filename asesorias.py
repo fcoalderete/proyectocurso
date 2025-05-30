@@ -12,6 +12,8 @@ import unicodedata
 st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de la FCA UACH", layout="wide")
 
 # Sidebar con logos e información de contacto
+# Primer logo + Universidad, Segundo logo + Facultad
+
 def setup_sidebar():
     with st.sidebar:
         # Primer logo: escala al ancho del contenedor
@@ -19,6 +21,12 @@ def setup_sidebar():
             st.image("escudo-texto-color.png", use_container_width=True)
         else:
             st.write("**[Logo FCA no disponible]**")
+        # Información de la Universidad debajo del primer logo
+        st.markdown("---")
+        st.header("Universidad Autónoma de Chihuahua")
+        st.write("C. Escorza 900, Col. Centro 31000")
+        st.write("Tel. +52 (614) 439 1500")
+        st.write("Chihuahua, Chih. México")
         # Segundo logo: centrado en una columna intermedia y con ancho fijo
         if os.path.exists("fca-escudo.png"):
             col1, col2, col3 = st.columns([1, 2, 1])
@@ -26,22 +34,20 @@ def setup_sidebar():
                 st.image("fca-escudo.png", width=100)
         else:
             st.write("**[Logo UACH no disponible]**")
+        # Información de la Facultad debajo del segundo logo
         st.markdown("---")
-        # Información de contacto FCA
         st.header("Facultad de Contaduría y Administración")
         st.write("Circuito Universitario Campus II")
         st.write("Tel. +52 (614) 442 0000")
         st.write("Chihuahua, Chih. México")
         st.markdown("---")
-        # Información de contacto UACH
-        st.header("Universidad Autónoma de Chihuahua")
-        st.write("C. Escorza 900, Col. Centro 31000")
-        st.write("Tel. +52 (614) 439 1500")
-        st.write("Chihuahua, Chih. México")
-        st.markdown("---")
         st.write("**Realizado por Francisco Aldrete**")
 
 setup_sidebar()
+
+# Animación de bienvenida
+st.balloons()
+
 
 # Título y subtítulo de la aplicación
 st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
