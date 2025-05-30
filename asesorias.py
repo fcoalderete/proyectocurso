@@ -56,25 +56,29 @@ for msg in st.session_state.history[1:]:
         st.write(msg["content"])
 
 # 5. Función de búsqueda con tolerancia a errores tipográficos y coincidencias
+import unicodedata
 from difflib import get_close_matches
 
+def normalize_text(s):
+    # Remover acentos y convertir a minúsculas
+    nkfd = unicodedata.normalize('NFKD', s)
+    return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
+
+# Precomputar lista de materias normalizadas
+materias_norm = [normalize_text(t['materia']) for t in tutores]
+
 def buscar_tutores(consulta, k=3):
-    norm = consulta.lower().strip()
-    # 5.1 Búsqueda difusa (fuzzy) sobre nombres de materia
-    materias_set = list({t["materia"].lower() for t in tutores})
-    close = get_close_matches(norm, materias_set, n=k, cutoff=0.6)
-    if close:
-        matches = [t for t in tutores if t["materia"].lower() in close]
-        return matches[:k]
-    # 5.2 Coincidencia exacta por palabra completa
-    word_matches = [t for t in tutores if norm in t["materia"].lower().split()]
-    if word_matches:
-        return word_matches[:k]
-    # 5.3 Coincidencia por substring
-    sub_matches = [t for t in tutores if norm in t["materia"].lower()]
+    norm = normalize_text(consulta)
+    # 5.1 Coincidencia por substring en texto normalizado
+    sub_matches = [t for t in tutores if norm in normalize_text(t['materia'])]
     if sub_matches:
         return sub_matches[:k]
-    # 5.4 Búsqueda semántica como fallback
+    # 5.2 Búsqueda difusa (fuzzy) sobre nombres de materia normalizados
+    close = get_close_matches(norm, materias_norm, n=k, cutoff=0.7)
+    if close:
+        matches = [t for t in tutores if normalize_text(t['materia']) in close]
+        return matches[:k]
+    # 5.3 Búsqueda semántica como última opción
     try:
         q_resp = client.embeddings.create(model="text-embedding-ada-002", input=consulta)
         q_emb = q_resp.data[0].embedding
@@ -84,7 +88,7 @@ def buscar_tutores(consulta, k=3):
     D, I = index.search(np.array([q_emb], dtype="float32"), k=k)
     return [tutores[i] for i in I[0]]
 
-# 6. Input y salida en chat Input y salida en chat
+# 6. Input y salida en chat Input y salida en chat Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role": "user", "content": consulta})
