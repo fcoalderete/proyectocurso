@@ -11,28 +11,28 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 
 # Cliente de OpenAI y validación de clave
 try:
-    api_key = st.secrets["api_key"]
+    api_key = st.secrets.get("api_key", None)
     if not api_key:
         raise KeyError
     client = OpenAI(api_key=api_key)
 except KeyError:
-    st.error("Clave de OpenAI no encontrada. Asegúrate de definir 'api_key' en .streamlit/secrets.toml o en Secrets de Streamlit Cloud.")
+    st.error("Clave de OpenAI no encontrada. Define 'api_key' en .streamlit/secrets.toml o en Secrets de Streamlit Cloud.")
     st.stop()
 
 # 1. Carga de datos de tutores
+@st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df = pd.read_csv(path)
     df.columns = [c.strip().lower() for c in df.columns]
     return df.to_dict(orient="records")
 
-@st.cache_data(ttl=3600)
 tutores = cargar_tutores()
 
 # 2. Preparación del índice semántico
 @st.cache_resource
-def preparar_indice(tutores):
+def preparar_indice(data):
     embs = []
-    for t in tutores:
+    for t in data:
         try:
             resp = client.embeddings.create(model="text-embedding-ada-002", input=t["materia"])
             emb = resp.data[0].embedding
@@ -52,7 +52,7 @@ index = preparar_indice(tutores)
 
 # 3. Historial conversacional
 if "history" not in st.session_state:
-    st.session_state.history = [{"role": "system", "content": "Eres un asistente experto en tutorías de la FCA-UACH."}]
+    st.session_state.history = [{"role":"system","content":"Eres un asistente experto en tutorías de la FCA-UACH."}]
 
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
@@ -80,20 +80,17 @@ def buscar_tutores(consulta, k=3):
 # 5. Input y salida en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
-    st.session_state.history.append({"role": "user", "content": consulta})
+    st.session_state.history.append({"role":"user","content":consulta})
     with st.chat_message("user"):
         st.write(consulta)
 
     recomendados = buscar_tutores(consulta)
     st.subheader("Profesores recomendados:")
     for t in recomendados:
-        st.markdown(
-            f"**{t['maestro']}**  
-             _{t['materia']}_  
-             📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}"
-        )
+        st.markdown(f"**{t['maestro']}**  
+_{t['materia']}_  📅 {t['días']}  |  ⏰ {t['hora']}  |  📍 {t['lugar']}")
 
     respuesta = "¿En qué más te puedo ayudar?"
-    st.session_state.history.append({"role": "assistant", "content": respuesta})
+    st.session_state.history.append({"role":"assistant","content":respuesta})
     with st.chat_message("assistant"):
         st.write(respuesta)
