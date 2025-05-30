@@ -95,11 +95,15 @@ if consulta:
     with st.chat_message("user"):
         st.write(consulta)
 
-    recomendados = buscar_tutores(consulta)
-    st.subheader("Profesores recomendados:")
-    for t in recomendados:
-        line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
-        st.markdown(line)
+        recomendados = buscar_tutores(consulta)
+    if recomendados:
+        st.subheader("Profesores recomendados:")
+        for t in recomendados:
+            line = f"**{t['maestro']}** | _{t['materia']}_ | 📅 {t['días']} | ⏰ {t['hora']} | 📍 {t['lugar']}"
+            st.markdown(line)
+    else:
+        st.warning("No hay maestro asesor disponible para esa materia.")
+        st.info("Sin embargo, puedo ayudarte con otras dudas o brindarte más información.")
 
     # Conversación adicional con IA
     try:
