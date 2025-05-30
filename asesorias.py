@@ -1,4 +1,4 @@
-# Version 1.2: Added sidebar with contact info and logos
+# Version 1.3: Fix cache decorator placement for cargar_tutores
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -13,17 +13,14 @@ st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de 
 # Sidebar con logos e información de contacto
 def setup_sidebar():
     with st.sidebar:
-        # Logos
         st.image("escudo-texto-color.png", use_column_width=True)
         st.image("fca-escudo.png", use_column_width=True)
         st.markdown("---")
-        # FCA
         st.header("Facultad de Contaduría y Administración")
         st.write("Circuito Universitario Campus II")
         st.write("Tel. +52 (614) 442 0000")
         st.write("Chihuahua, Chih. México")
         st.markdown("---")
-        # UACH
         st.header("Universidad Autónoma de Chihuahua")
         st.write("C. Escorza 900, Col. Centro 31000")
         st.write("Tel. +52 (614) 439 1500")
@@ -37,9 +34,10 @@ st.title("Horarios y docentes de Asesorías Académicas de la FCA UACH")
 st.subheader("Consulta tutorías por materia y recibe recomendaciones personalizadas de profesores y horarios.")
 
 # Version history:
-# 1.0 - Initial implementation with substring and semantic fallback.
-# 1.1 - Removed semantic fallback; only substring search.
-# 1.2 - Added sidebar with contact info and logos.
+# 1.0 - Initial implementation.
+# 1.1 - Removed semantic fallback.
+# 1.2 - Added sidebar.
+# 1.3 - Fixed decorator placement for cargar_tutores caching.
 
 # 1. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
@@ -54,13 +52,14 @@ def normalize_text(s):
     return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
 
 # 2. Carga de datos de tutores
-def cargar_tutores(path="tutores.csv"):
-    df = pd.read_csv(path)
-    df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-    df.columns = [c.strip().lower() for c in df.columns]
-    return df.to_dict(orient="records")
-
+df = None
 @st.cache_data(ttl=3600)
+def cargar_tutores(path="tutores.csv"):
+    df_local = pd.read_csv(path)
+    df_local = df_local.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df_local.columns = [c.strip().lower() for c in df_local.columns]
+    return df_local.to_dict(orient="records")
+
 # Carga efectiva
 tutores = cargar_tutores()
 
