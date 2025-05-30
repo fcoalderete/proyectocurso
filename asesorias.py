@@ -1,4 +1,4 @@
-# Version 1.5: Replace deprecated use_column_width, center logos, size adjustments
+# Version 1.6: Display second logo via st.image centered using columns
 import os
 import streamlit as st
 import pandas as pd
@@ -14,19 +14,16 @@ st.set_page_config(page_title="Horarios y docentes de Asesorías Académicas de 
 # Sidebar con logos e información de contacto
 def setup_sidebar():
     with st.sidebar:
-        # Primer logo: escala al ancho de contenedor
+        # Primer logo: escala al ancho del contenedor
         if os.path.exists("escudo-texto-color.png"):
             st.image("escudo-texto-color.png", use_container_width=True)
         else:
             st.write("**[Logo FCA no disponible]**")
-        # Segundo logo: centrado y con ancho fijo
+        # Segundo logo: centrado en una columna intermedia y con ancho fijo
         if os.path.exists("fca-escudo.png"):
-            st.markdown(
-                "<div style='text-align: center;'>"
-                "<img src='fca-escudo.png' width='150'/>"
-                "</div>",
-                unsafe_allow_html=True
-            )
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                st.image("fca-escudo.png", width=100)
         else:
             st.write("**[Logo UACH no disponible]**")
         st.markdown("---")
@@ -56,7 +53,8 @@ st.subheader("Consulta tutorías por materia y recibe recomendaciones personaliz
 # 1.2 - Added sidebar.
 # 1.3 - Fixed decorator placement for cargar_tutores caching.
 # 1.4 - Handled missing logo files in sidebar.
-# 1.5 - Replaced use_column_width; centered and resized logos.
+# 1.5 - Replaced use_column_width; centered and resized logos with HTML.
+# 1.6 - Use st.image within columns to center second logo and avoid HTML.
 
 # 1. Validación y cliente de OpenAI
 api_key = st.secrets.get("api_key")
@@ -71,14 +69,13 @@ def normalize_text(s):
     return ''.join(c for c in nkfd if not unicodedata.combining(c)).lower().strip()
 
 # 2. Carga de datos de tutores
-@st.cache_data(ttl=3600)
 def cargar_tutores(path="tutores.csv"):
     df_local = pd.read_csv(path)
     df_local = df_local.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     df_local.columns = [c.strip().lower() for c in df_local.columns]
     return df_local.to_dict(orient="records")
 
-# Carga efectiva
+@st.cache_data(ttl=3600)
 tutores = cargar_tutores()
 
 # 3. Preparación del índice semántico
@@ -125,7 +122,6 @@ if consulta:
         st.warning("No hay maestro asesor disponible para esa materia.")
         st.info("Sin embargo, puedo ayudarte con otras dudas o brindarte más información.")
 
-    # Conversación adicional con IA
     stream = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=st.session_state.history,
