@@ -178,61 +178,70 @@ def buscar_tutores(consulta):
     4. Similitud textual con umbral bajo
     5. Búsqueda parcial flexible
     """
-    # Expandir consulta con sinónimos
-    terminos_busqueda = expandir_consulta(consulta)
-    
-    resultados = []
-    puntuaciones = {}
-    
-    for tutor in tutores:
-        materia_norm = tutor['materia_normalizada']
-        palabras_materia = tutor['palabras_clave']
-        puntuacion_total = 0
+    try:
+        # Expandir consulta con sinónimos
+        terminos_busqueda = expandir_consulta(consulta)
         
-        # Probar cada término de búsqueda expandido
-        for termino in terminos_busqueda:
-            puntuacion = 0
-            
-            # Estrategia 1: Coincidencia exacta de substring (peso muy alto)
-            if termino in materia_norm:
-                puntuacion += 150
-            
-            # Estrategia 2: Coincidencia de palabras individuales (peso alto)
-            palabras_termino = termino.split()
-            for palabra_busq in palabras_termino:
-                if len(palabra_busq) > 2:  # Solo palabras significativas
-                    for palabra_mat in palabras_materia:
-                        if palabra_busq == palabra_mat:
-                            puntuacion += 100
-                        elif palabra_busq in palabra_mat or palabra_mat in palabra_busq:
-                            puntuacion += 60
-            
-            # Estrategia 3: Similitud textual (peso medio)
-            similitud = calcular_similitud(termino, tutor['materia'])
-            if similitud > 0.2:  # Umbral más bajo para mayor flexibilidad
-                puntuacion += similitud * 80
-            
-            # Estrategia 4: Búsqueda parcial muy flexible
-            if any(palabra_busq in palabra_mat for palabra_busq in palabras_termino if len(palabra_busq) > 2 
-                   for palabra_mat in palabras_materia):
-                puntuacion += 40
-            
-            puntuacion_total = max(puntuacion_total, puntuacion)
+        resultados_con_puntuacion = []
         
-        if puntuacion_total > 20:  # Umbral mínimo más bajo
-            if tutor['materia'] not in puntuaciones or puntuaciones[tutor['materia']] < puntuacion_total:
-                puntuaciones[tutor['materia']] = puntuacion_total
-                # Agregar o reemplazar en resultados
-                resultados = [t for t in resultados if t['materia'] != tutor['materia']]
-                resultados.append(tutor)
+        for tutor in tutores:
+            materia_norm = tutor['materia_normalizada']
+            palabras_materia = tutor['palabras_clave']
+            puntuacion_total = 0
+            
+            # Probar cada término de búsqueda expandido
+            for termino in terminos_busqueda:
+                puntuacion = 0
+                
+                # Estrategia 1: Coincidencia exacta de substring (peso muy alto)
+                if termino in materia_norm:
+                    puntuacion += 150
+                
+                # Estrategia 2: Coincidencia de palabras individuales (peso alto)
+                palabras_termino = termino.split()
+                for palabra_busq in palabras_termino:
+                    if len(palabra_busq) > 2:  # Solo palabras significativas
+                        for palabra_mat in palabras_materia:
+                            if palabra_busq == palabra_mat:
+                                puntuacion += 100
+                            elif palabra_busq in palabra_mat or palabra_mat in palabra_busq:
+                                puntuacion += 60
+                
+                # Estrategia 3: Similitud textual (peso medio)
+                try:
+                    similitud = calcular_similitud(termino, tutor['materia'])
+                    if similitud > 0.2:  # Umbral más bajo para mayor flexibilidad
+                        puntuacion += similitud * 80
+                except:
+                    pass
+                
+                # Estrategia 4: Búsqueda parcial muy flexible
+                try:
+                    if any(palabra_busq in palabra_mat for palabra_busq in palabras_termino if len(palabra_busq) > 2 
+                           for palabra_mat in palabras_materia):
+                        puntuacion += 40
+                except:
+                    pass
+                
+                puntuacion_total = max(puntuacion_total, puntuacion)
+            
+            if puntuacion_total > 20:  # Umbral mínimo más bajo
+                resultados_con_puntuacion.append((puntuacion_total, tutor))
+        
+        # Eliminar duplicados por materia manteniendo el de mayor puntuación
+        materias_vistas = {}
+        for puntuacion, tutor in resultados_con_puntuacion:
+            materia = tutor['materia']
+            if materia not in materias_vistas or materias_vistas[materia][0] < puntuacion:
+                materias_vistas[materia] = (puntuacion, tutor)
+        
+        # Ordenar por puntuación descendente
+        resultados_finales = sorted(materias_vistas.values(), key=lambda x: x[0], reverse=True)
+        return [tutor for puntuacion, tutor in resultados_finales[:15]]
     
-    # Ordenar por puntuación descendente
-    if resultados:
-        resultados_con_puntos = [(puntuaciones[t['materia']], t) for t in resultados]
-        resultados_ordenados = [tutor for puntuacion, tutor in sorted(resultados_con_puntos, reverse=True)]
-        return resultados_ordenados[:15]  # Aumentar límite a 15 mejores resultados
-    
-    return []
+    except Exception as e:
+        st.error(f"Error en la búsqueda: {e}")
+        return []
 
 # Función de búsqueda semántica como respaldo
 def buscar_semantica(consulta, k=8):
