@@ -227,7 +227,9 @@ def buscar_tutores(consulta):
             
             if puntuacion_total > 20:  # Umbral mínimo más bajo
                 resultados_con_puntuacion.append((puntuacion_total, tutor))
-        
+        # … después de llenar “resultados_con_puntuacion” …
+        st.write("DEBUG – resultados_con_puntuacion:", resultados_con_puntuacion)
+        st.write("DEBUG – tipo(resultados_con_puntuacion):", type(resultados_con_puntuacion))
         # Eliminar duplicados por materia manteniendo el de mayor puntuación
         materias_vistas = {}
         for puntuacion, tutor in resultados_con_puntuacion:
