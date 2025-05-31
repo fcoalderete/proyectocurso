@@ -171,76 +171,94 @@ for msg in st.session_state.history[1:]:
 # 6. Función de búsqueda optimizada para el CSV real
 def buscar_tutores(consulta):
     """
-    Búsqueda optimizada usando múltiples estrategias y sinónimos:
-    1. Expansión de consulta con sinónimos
-    2. Coincidencia exacta de substring
-    3. Búsqueda por palabras clave individual
-    4. Similitud textual con umbral bajo
-    5. Búsqueda parcial flexible
+    Búsqueda optimizada usando sinónimos y varios niveles:
+    1. Expansión de consulta (sinónimos).
+    2. Coincidencia exacta de substring en la materia.
+    3. Comparación de palabras clave.
+    4. Similitud textual (SequenceMatcher).
+    5. Búsqueda parcial muy flexible.
     """
     try:
-        # Expandir consulta con sinónimos
+        # 1) Expande la consulta con sinónimos
         terminos_busqueda = expandir_consulta(consulta)
-        
+
         resultados_con_puntuacion = []
-        
+
         for tutor in tutores:
-            materia_norm = tutor['materia_normalizada']
-            palabras_materia = tutor['palabras_clave']
+            materia_norm = tutor.get("materia_normalizada", "")
+            palabras_materia = tutor.get("palabras_clave", [])
             puntuacion_total = 0
-            
-            # Probar cada término de búsqueda expandido
+
+            # Evaluar cada término expandido
             for termino in terminos_busqueda:
-                puntuacion = 0
-                
-                # Estrategia 1: Coincidencia exacta de substring (peso muy alto)
-                if termino in materia_norm:
-                    puntuacion += 150
-                
-                # Estrategia 2: Coincidencia de palabras individuales (peso alto)
-                palabras_termino = termino.split()
-                for palabra_busq in palabras_termino:
-                    if len(palabra_busq) > 2:  # Solo palabras significativas
+                if not isinstance(termino, str):
+                    continue
+                termino_norm = normalize_text(termino)
+                mejor_por_termino = 0
+
+                # --- Estrategia 1: Substring exacto (peso 150) ---
+                if termino_norm in materia_norm:
+                    mejor_por_termino = max(mejor_por_termino, 150)
+
+                # --- Estrategia 2: Palabras clave (peso 100/60) ---
+                for palabra_busq in termino_norm.split():
+                    if len(palabra_busq) > 2:
                         for palabra_mat in palabras_materia:
                             if palabra_busq == palabra_mat:
-                                puntuacion += 100
+                                mejor_por_termino = max(mejor_por_termino, 100)
                             elif palabra_busq in palabra_mat or palabra_mat in palabra_busq:
-                                puntuacion += 60
-                
-                # Estrategia 3: Similitud textual (peso medio)
+                                mejor_por_termino = max(mejor_por_termino, 60)
+
+                # --- Estrategia 3: Similitud textual (peso ≈ similitud*80 si > 0.2) ---
                 try:
-                    similitud = calcular_similitud(termino, tutor['materia'])
-                    if similitud > 0.2:  # Umbral más bajo para mayor flexibilidad
-                        puntuacion += similitud * 80
-                except:
+                    simil = SequenceMatcher(
+                        None,
+                        termino_norm,
+                        normalize_text(tutor["materia"])
+                    ).ratio()
+                    if simil > 0.2:
+                        mejor_por_termino = max(mejor_por_termino, simil * 80)
+                except Exception:
                     pass
-                
-                # Estrategia 4: Búsqueda parcial muy flexible
-                try:
-                    if any(palabra_busq in palabra_mat for palabra_busq in palabras_termino if len(palabra_busq) > 2 
-                           for palabra_mat in palabras_materia):
-                        puntuacion += 40
-                except:
-                    pass
-                
-                puntuacion_total = max(puntuacion_total, puntuacion)
-            
-            if puntuacion_total > 20:  # Umbral mínimo más bajo
+
+                # --- Estrategia 4: Búsqueda parcial muy flexible (peso 40) ---
+                for palabra_busq in termino_norm.split():
+                    if len(palabra_busq) > 2:
+                        for palabra_mat in palabras_materia:
+                            if palabra_busq in palabra_mat:
+                                mejor_por_termino = max(mejor_por_termino, 40)
+
+                # Acumula la mejor puntuación para este término
+                puntuacion_total = max(puntuacion_total, mejor_por_termino)
+
+            # Solo agregamos si la puntuación supera el umbral (20)
+            if puntuacion_total > 20:
+                # Asegurarnos de que es una tupla (número, diccionario)
                 resultados_con_puntuacion.append((puntuacion_total, tutor))
-        # … después de llenar “resultados_con_puntuacion” …
+
+        # ----------------------
+        #   DEPURACIÓN PUNTUAL
+        # ----------------------
+        # Justo aquí imprimimos qué hay dentro y el tipo de cada elemento:
         st.write("DEBUG – resultados_con_puntuacion:", resultados_con_puntuacion)
-        st.write("DEBUG – tipo(resultados_con_puntuacion):", type(resultados_con_puntuacion))
-        # Eliminar duplicados por materia manteniendo el de mayor puntuación
+        for idx, elemento in enumerate(resultados_con_puntuacion):
+            st.write(f"  elemento[{idx}]:", elemento, "   tipo:", type(elemento))
+
+        # --- Eliminar duplicados por materia, manteniendo la mayor puntuación ---
         materias_vistas = {}
         for puntuacion, tutor in resultados_con_puntuacion:
-            materia = tutor['materia']
+            materia = tutor.get("materia", "")
             if materia not in materias_vistas or materias_vistas[materia][0] < puntuacion:
                 materias_vistas[materia] = (puntuacion, tutor)
-        
-        # Ordenar por puntuación descendente
-        resultados_finales = sorted(materias_vistas.values(), key=lambda x: x[0], reverse=True)
+
+        # --- Orden descendente y devolver hasta 15 tutores ---
+        resultados_finales = sorted(
+            materias_vistas.values(),
+            key=lambda x: x[0],
+            reverse=True
+        )
         return [tutor for puntuacion, tutor in resultados_finales[:15]]
-    
+
     except Exception as e:
         st.error(f"Error en la búsqueda: {e}")
         return []
