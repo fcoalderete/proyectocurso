@@ -21,6 +21,7 @@ def normalize_text(s):
 def setup_sidebar():
     with st.sidebar:
         st.markdown("---")
+        st.write("**Versión 2.2**")
         # Logo Universidad
         if os.path.exists("escudo-texto-color.png"):
             c1, c2, c3 = st.columns([1, 2, 1])
