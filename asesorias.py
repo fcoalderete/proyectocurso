@@ -175,7 +175,7 @@ def buscar_tutores(consulta):
     1. Expansión de consulta (sinónimos).
     2. Coincidencia exacta de substring en la materia.
     3. Comparación de palabras clave.
-    4. Similitud textual (SequenceMatcher).
+    4. Similitud textual (SequenceMatcher) — ahora con umbral > 0.5.
     5. Búsqueda parcial muy flexible.
     """
     try:
@@ -209,14 +209,14 @@ def buscar_tutores(consulta):
                             elif palabra_busq in palabra_mat or palabra_mat in palabra_busq:
                                 mejor_por_termino = max(mejor_por_termino, 60)
 
-                # --- Estrategia 3: Similitud textual (peso ≈ similitud*80 si > 0.2) ---
+                # --- Estrategia 3: Similitud textual (peso ≈ similitud * 80 si > 0.5) ---
                 try:
                     simil = SequenceMatcher(
                         None,
                         termino_norm,
                         normalize_text(tutor["materia"])
                     ).ratio()
-                    if simil > 0.2:
+                    if simil > 0.5:                     # <-- Umbral subido a 0.5
                         mejor_por_termino = max(mejor_por_termino, simil * 80)
                 except Exception:
                     pass
@@ -233,16 +233,7 @@ def buscar_tutores(consulta):
 
             # Solo agregamos si la puntuación supera el umbral (20)
             if puntuacion_total > 20:
-                # Asegurarnos de que es una tupla (número, diccionario)
                 resultados_con_puntuacion.append((puntuacion_total, tutor))
-
-        # ----------------------
-        #   DEPURACIÓN PUNTUAL
-        # ----------------------
-        # Justo aquí imprimimos qué hay dentro y el tipo de cada elemento:
-        st.write("DEBUG – resultados_con_puntuacion:", resultados_con_puntuacion)
-        for idx, elemento in enumerate(resultados_con_puntuacion):
-            st.write(f"  elemento[{idx}]:", elemento, "   tipo:", type(elemento))
 
         # --- Eliminar duplicados por materia, manteniendo la mayor puntuación ---
         materias_vistas = {}
