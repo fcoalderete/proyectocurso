@@ -1,4 +1,4 @@
-# Versión 2.2: Búsqueda mejorada con múltiples estrategias
+# Versión 2.3: Búsqueda optimizada basada en análisis del CSV real
 import os
 import streamlit as st
 import pandas as pd
@@ -25,13 +25,49 @@ def normalize_text(s):
     cleaned = re.sub(r'[^\w\s]', ' ', normalized)
     return ' '.join(cleaned.lower().split())
 
+# Diccionario de sinónimos y términos relacionados (basado en el CSV real)
+SINONIMOS_MATERIAS = {
+    'redes': ['redes y comunicaciones', 'comunicaciones', 'sistemas operativos', 'internet', 'tecnologias'],
+    'red': ['redes y comunicaciones', 'comunicaciones', 'sistemas operativos', 'internet', 'tecnologias'],
+    'mercado': ['mercadotecnia', 'investigacion de mercados', 'mercado de capitales', 'mercado de dinero', 'mercado de valores'],
+    'marketing': ['mercadotecnia', 'comunicacion integral de mercadotecnia', 'publicidad', 'promocion'],
+    'mercadotecnia': ['mercadotecnia', 'marketing', 'comunicacion integral', 'publicidad', 'promocion'],
+    'sistemas': ['sistemas operativos', 'analisis y diseno de sistemas', 'fundamentos de sistemas', 'administracion de sistemas'],
+    'computacion': ['sistemas operativos', 'arquitectura de computadoras', 'fundamentos de sistemas'],
+    'informatica': ['sistemas operativos', 'tecnologias y manejo de la informacion', 'administracion de las operaciones'],
+    'finanzas': ['mercado de capitales', 'mercado de dinero', 'mercado de valores', 'administracion de inversiones'],
+    'contabilidad': ['aspectos basicos de contabilidad', 'analisis e interpretacion de estados financieros', 'auditoria'],
+    'recursos humanos': ['administracion de recursos humanos', 'administracion de la compensacion'],
+    'administracion': ['administracion i', 'administracion ii', 'administracion de la pyme', 'administracion bancaria'],
+    'produccion': ['administracion de la produccion', 'administracion de proyectos'],
+    'comercio': ['entorno comercial internacional', 'entorno comercial latinoamericano', 'negocios por internet'],
+    'internacional': ['entorno comercial internacional', 'mercadotecnia internacional', 'negocios por internet'],
+    'publicidad': ['publicidad y promocion', 'comunicacion integral de mercadotecnia'],
+    'ventas': ['comunicacion integral de mercadotecnia y ventas', 'mercadotecnia'],
+    'investigacion': ['investigacion de mercados', 'investigacion de operaciones']
+}
+
+# Función para expandir consulta con sinónimos
+def expandir_consulta(consulta):
+    """Expande la consulta original con sinónimos y términos relacionados"""
+    consulta_norm = normalize_text(consulta)
+    terminos_expandidos = [consulta_norm]
+    
+    # Buscar sinónimos para cada palabra en la consulta
+    palabras = consulta_norm.split()
+    for palabra in palabras:
+        if palabra in SINONIMOS_MATERIAS:
+            terminos_expandidos.extend(SINONIMOS_MATERIAS[palabra])
+    
+    return list(set(terminos_expandidos))  # Eliminar duplicados
+
 # Nueva función para extraer palabras clave
 def extraer_palabras_clave(texto):
     """Extrae palabras clave relevantes del texto"""
     texto_norm = normalize_text(texto)
     # Dividir en palabras y filtrar palabras comunes irrelevantes
-    stop_words = {'de', 'del', 'la', 'el', 'en', 'y', 'o', 'para', 'con', 'por', 'a', 'al', 'las', 'los', 'una', 'un'}
-    palabras = [p for p in texto_norm.split() if len(p) > 2 and p not in stop_words]
+    stop_words = {'de', 'del', 'la', 'el', 'en', 'y', 'o', 'para', 'con', 'por', 'a', 'al', 'las', 'los', 'una', 'un', 'ii', 'i'}
+    palabras = [p for p in texto_norm.split() if len(p) > 1 and p not in stop_words]
     return palabras
 
 # Función de similitud entre textos
@@ -39,11 +75,11 @@ def calcular_similitud(texto1, texto2):
     """Calcula similitud entre dos textos usando SequenceMatcher"""
     return SequenceMatcher(None, normalize_text(texto1), normalize_text(texto2)).ratio()
 
-# 1. Sidebar con logos e información de contacto (sin cambios)
+# 1. Sidebar con logos e información de contacto
 def setup_sidebar():
     with st.sidebar:
         st.markdown("---")
-        st.write("**Versión 2.2 - Búsqueda Mejorada**")
+        st.write("**Versión 2.3 - Búsqueda Inteligente**")
         # Logo Universidad
         if os.path.exists("escudo-texto-color.png"):
             c1, c2, c3 = st.columns([1, 2, 1])
@@ -91,7 +127,10 @@ def cargar_tutores(path="tutores.csv"):
     try:
         df_local = pd.read_csv(path, encoding='utf-8')
     except UnicodeDecodeError:
-        df_local = pd.read_csv(path, encoding='latin-1')
+        try:
+            df_local = pd.read_csv(path, encoding='latin-1')
+        except:
+            df_local = pd.read_csv(path, encoding='cp1252')
     
     # Limpiar datos
     df_local = df_local.applymap(lambda x: x.strip() if isinstance(x, str) else x)
@@ -99,6 +138,7 @@ def cargar_tutores(path="tutores.csv"):
     
     # Agregar campo de búsqueda normalizado
     df_local['materia_normalizada'] = df_local['materia'].apply(normalize_text)
+    df_local['palabras_clave'] = df_local['materia'].apply(extraer_palabras_clave)
     
     return df_local.to_dict(orient="records")
 
@@ -107,168 +147,256 @@ tutores = cargar_tutores()
 # 4. Preparación del índice semántico (mantenido para casos complejos)
 @st.cache_resource
 def preparar_indice(data):
-    embs = [client.embeddings.create(model="text-embedding-ada-002", input=t["materia"]).data[0].embedding for t in data]
-    arr = np.array(embs, dtype="float32")
-    index = faiss.IndexFlatL2(arr.shape[1])
-    index.add(arr)
-    return index
+    try:
+        embs = [client.embeddings.create(model="text-embedding-ada-002", input=t["materia"]).data[0].embedding for t in data]
+        arr = np.array(embs, dtype="float32")
+        index = faiss.IndexFlatL2(arr.shape[1])
+        index.add(arr)
+        return index
+    except Exception as e:
+        st.warning(f"No se pudo crear el índice semántico: {e}")
+        return None
 
 index = preparar_indice(tutores)
 
 # 5. Historial conversacional
 if "history" not in st.session_state:
-    st.session_state.history = [{"role":"system","content":"Eres un asistente experto en tutorías de la FCA-UACH. Ayuda a encontrar profesores y horarios de asesorías académicas."}]
+    st.session_state.history = [{"role":"system","content":"Eres un asistente experto en tutorías de la FCA-UACH. Ayuda a encontrar profesores y horarios de asesorías académicas usando el catálogo real de materias disponibles."}]
 
+# Mostrar historial de conversación
 for msg in st.session_state.history[1:]:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# 6. Función de búsqueda mejorada con múltiples estrategias
+# 6. Función de búsqueda optimizada para el CSV real
 def buscar_tutores(consulta):
     """
-    Búsqueda mejorada usando múltiples estrategias:
-    1. Coincidencia exacta de substring
-    2. Búsqueda por palabras clave
-    3. Similitud textual
-    4. Búsqueda semántica con embeddings (fallback)
+    Búsqueda optimizada usando múltiples estrategias y sinónimos:
+    1. Expansión de consulta con sinónimos
+    2. Coincidencia exacta de substring
+    3. Búsqueda por palabras clave individual
+    4. Similitud textual con umbral bajo
+    5. Búsqueda parcial flexible
     """
-    consulta_norm = normalize_text(consulta)
-    palabras_consulta = extraer_palabras_clave(consulta)
+    # Expandir consulta con sinónimos
+    terminos_busqueda = expandir_consulta(consulta)
     
     resultados = []
-    puntuaciones = []
+    puntuaciones = {}
     
     for tutor in tutores:
         materia_norm = tutor['materia_normalizada']
-        puntuacion = 0
+        palabras_materia = tutor['palabras_clave']
+        puntuacion_total = 0
         
-        # Estrategia 1: Coincidencia exacta de substring (peso alto)
-        if consulta_norm in materia_norm:
-            puntuacion += 100
+        # Probar cada término de búsqueda expandido
+        for termino in terminos_busqueda:
+            puntuacion = 0
+            
+            # Estrategia 1: Coincidencia exacta de substring (peso muy alto)
+            if termino in materia_norm:
+                puntuacion += 150
+            
+            # Estrategia 2: Coincidencia de palabras individuales (peso alto)
+            palabras_termino = termino.split()
+            for palabra_busq in palabras_termino:
+                if len(palabra_busq) > 2:  # Solo palabras significativas
+                    for palabra_mat in palabras_materia:
+                        if palabra_busq == palabra_mat:
+                            puntuacion += 100
+                        elif palabra_busq in palabra_mat or palabra_mat in palabra_busq:
+                            puntuacion += 60
+            
+            # Estrategia 3: Similitud textual (peso medio)
+            similitud = calcular_similitud(termino, tutor['materia'])
+            if similitud > 0.2:  # Umbral más bajo para mayor flexibilidad
+                puntuacion += similitud * 80
+            
+            # Estrategia 4: Búsqueda parcial muy flexible
+            if any(palabra_busq in palabra_mat for palabra_busq in palabras_termino if len(palabra_busq) > 2 
+                   for palabra_mat in palabras_materia):
+                puntuacion += 40
+            
+            puntuacion_total = max(puntuacion_total, puntuacion)
         
-        # Estrategia 2: Coincidencia de palabras clave (peso medio-alto)
-        palabras_materia = extraer_palabras_clave(tutor['materia'])
-        palabras_comunes = set(palabras_consulta) & set(palabras_materia)
-        if palabras_comunes:
-            puntuacion += len(palabras_comunes) * 30
-        
-        # Estrategia 3: Similitud textual (peso medio)
-        similitud = calcular_similitud(consulta, tutor['materia'])
-        if similitud > 0.3:  # Umbral de similitud
-            puntuacion += similitud * 50
-        
-        # Estrategia 4: Búsqueda parcial en cada palabra
-        for palabra in palabras_consulta:
-            if len(palabra) > 2:  # Solo palabras significativas
-                for palabra_materia in palabras_materia:
-                    if palabra in palabra_materia or palabra_materia in palabra:
-                        puntuacion += 20
-        
-        if puntuacion > 0:
-            resultados.append(tutor)
-            puntuaciones.append(puntuacion)
+        if puntuacion_total > 20:  # Umbral mínimo más bajo
+            if tutor['materia'] not in puntuaciones or puntuaciones[tutor['materia']] < puntuacion_total:
+                puntuaciones[tutor['materia']] = puntuacion_total
+                # Agregar o reemplazar en resultados
+                resultados = [t for t in resultados if t['materia'] != tutor['materia']]
+                resultados.append(tutor)
     
     # Ordenar por puntuación descendente
     if resultados:
-        resultados_ordenados = [x for _, x in sorted(zip(puntuaciones, resultados), reverse=True)]
-        return resultados_ordenados[:10]  # Limitar a 10 mejores resultados
+        resultados_con_puntos = [(puntuaciones[t['materia']], t) for t in resultados]
+        resultados_ordenados = [tutor for _, tutor in sorted(resultados_con_puntos, reverse=True)]
+        return resultados_ordenados[:15]  # Aumentar límite a 15 mejores resultados
     
     return []
 
 # Función de búsqueda semántica como respaldo
-def buscar_semantica(consulta, k=5):
+def buscar_semantica(consulta, k=8):
     """Búsqueda semántica usando embeddings como último recurso"""
+    if index is None:
+        return []
+    
     try:
         emb_consulta = client.embeddings.create(model="text-embedding-ada-002", input=consulta).data[0].embedding
         arr_consulta = np.array([emb_consulta], dtype="float32")
         distancias, indices = index.search(arr_consulta, k)
         
-        # Filtrar resultados con distancia razonable
         resultados_semanticos = []
+        materias_agregadas = set()
+        
         for i, dist in zip(indices[0], distancias[0]):
-            if dist < 1.0:  # Umbral de distancia semántica
-                resultados_semanticos.append(tutores[i])
+            if dist < 1.2:  # Umbral más flexible
+                tutor = tutores[i]
+                if tutor['materia'] not in materias_agregadas:
+                    resultados_semanticos.append(tutor)
+                    materias_agregadas.add(tutor['materia'])
         
         return resultados_semanticos
     except Exception as e:
         st.error(f"Error en búsqueda semántica: {e}")
         return []
 
-# 7. Interacción en chat mejorada
-consulta = st.chat_input("¿En qué materia necesitas asesoría? (ej: redes, mercadotecnia, contabilidad)")
+# 7. Función para mostrar sugerencias de búsqueda
+def mostrar_sugerencias_busqueda():
+    """Muestra sugerencias de términos de búsqueda populares"""
+    st.markdown("### 💡 **Sugerencias de búsqueda:**")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("**📊 Administración & Negocios:**")
+        st.markdown("• administración\n• mercadotecnia\n• recursos humanos\n• proyectos\n• pyme")
+    
+    with col2:
+        st.markdown("**💰 Finanzas & Contabilidad:**")
+        st.markdown("• contabilidad\n• finanzas\n• mercado\n• inversiones\n• auditoría")
+    
+    with col3:
+        st.markdown("**💻 Tecnología & Sistemas:**")
+        st.markdown("• redes\n• sistemas\n• computación\n• internet\n• tecnologías")
+
+# 8. Interacción en chat optimizada
+consulta = st.chat_input("🔍 Escribe el nombre de la materia (ej: redes, mercadotecnia, contabilidad, administración)")
 
 if consulta:
     st.session_state.history.append({"role":"user","content":consulta})
     with st.chat_message("user"):
         st.write(consulta)
 
-    with st.spinner("🔍 Buscando profesores..."):
-        # Búsqueda principal mejorada
+    with st.spinner("🔍 Analizando consulta y buscando profesores..."):
+        # Mostrar términos de búsqueda expandidos
+        terminos_expandidos = expandir_consulta(consulta)
+        if len(terminos_expandidos) > 1:
+            st.info(f"🎯 **Búsqueda expandida:** {', '.join(terminos_expandidos[:5])}")
+        
+        # Búsqueda principal optimizada
         recomendados = buscar_tutores(consulta)
         
-        # Si no hay resultados, intentar búsqueda semántica
-        if not recomendados:
-            st.info("Probando búsqueda semántica...")
-            recomendados = buscar_semantica(consulta)
+        # Si pocos resultados, intentar búsqueda semántica
+        if len(recomendados) < 3 and index is not None:
+            st.info("🤖 Complementando con búsqueda semántica...")
+            semanticos = buscar_semantica(consulta)
+            # Agregar resultados semánticos que no estén ya incluidos
+            materias_existentes = {t['materia'] for t in recomendados}
+            recomendados.extend([t for t in semanticos if t['materia'] not in materias_existentes])
     
     st.markdown("---")
     
     if recomendados:
-        st.subheader(f"✅ {len(recomendados)} profesor(es) encontrado(s):")
+        st.success(f"✅ **{len(recomendados)} tutor(es) encontrado(s) para tu consulta**")
         
-        # Mostrar resultados en formato mejorado
-        for i, t in enumerate(recomendados, 1):
-            with st.expander(f"{i}. **{t['maestro']}** - {t['materia']}", expanded=(i <= 3)):
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.write(f"📅 **Días:** {t['días']}")
-                with col2:
-                    st.write(f"⏰ **Horario:** {t['hora']}")
-                with col3:
-                    st.write(f"📍 **Lugar:** {t['lugar']}")
+        # Agrupar por materia para mejor presentación
+        import itertools
+        from itertools import groupby
+        
+        # Agrupar resultados por materia
+        recomendados_ordenados = sorted(recomendados, key=lambda x: x['materia'])
+        grupos_materias = {k: list(v) for k, v in groupby(recomendados_ordenados, key=lambda x: x['materia'])}
+        
+        for materia, tutores_materia in grupos_materias.items():
+            with st.expander(f"📚 **{materia}** ({len(tutores_materia)} tutor{'es' if len(tutores_materia) > 1 else ''})", 
+                           expanded=len(grupos_materias) <= 3):
+                
+                for i, tutor in enumerate(tutores_materia, 1):
+                    col1, col2, col3, col4 = st.columns([3, 2, 2, 3])
+                    with col1:
+                        st.write(f"**👨‍🏫 {tutor['maestro']}**")
+                    with col2:
+                        st.write(f"📅 {tutor['días']}")
+                    with col3:
+                        st.write(f"⏰ {tutor['hora']}")
+                    with col4:
+                        st.write(f"📍 {tutor['lugar']}")
+                    
+                    if i < len(tutores_materia):
+                        st.markdown("---")
         
         st.markdown("---")
-        st.success("¿Necesitas más información? Haz otra consulta.")
+        st.info("💬 **¿Necesitas información de otra materia?** Escribe una nueva consulta.")
         
     else:
-        st.warning("❌ No se encontraron profesores para esa materia.")
-        st.info("💡 **Sugerencias:**\n- Intenta con palabras clave más específicas\n- Usa términos como 'contabilidad', 'administración', 'mercadotecnia'\n- Consulta la lista completa de materias disponibles")
+        st.warning("❌ **No se encontraron tutores para esa consulta**")
         
-        # Generar respuesta de IA con contexto mejorado
-        with st.spinner("🤖 Generando sugerencias de IA..."):
-            prompt_mejorado = f"""Usuario busca: "{consulta}"
+        # Mostrar sugerencias de búsqueda
+        mostrar_sugerencias_busqueda()
+        
+        # Generar respuesta de IA con mejor contexto
+        with st.spinner("🤖 Generando sugerencias personalizadas..."):
+            # Obtener muestra de materias disponibles para contexto
+            materias_disponibles = list(set(t['materia'] for t in tutores))[:20]
             
-            Contexto: Sistema de asesorías FCA-UACH. No se encontraron tutores.
-            
-            Proporciona:
-            1. Sugerencias de términos alternativos de búsqueda
-            2. Materias relacionadas que podrían existir
-            3. Consejos para refinar la búsqueda
-            
-            Responde de manera académica y útil."""
-            
-            st.session_state.history.append({"role":"user","content":prompt_mejorado})
-            
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=st.session_state.history,
-                max_tokens=500,
-                temperature=0.3
-            )
-            ia_resp = response.choices[0].message.content
-            
-        st.session_state.history.append({"role":"assistant","content":ia_resp})
-        with st.chat_message("assistant"):
-            st.write(ia_resp)
+            prompt_contextual = f"""La consulta del usuario fue: "{consulta}"
 
-# 8. Sección adicional: Mostrar estadísticas
-with st.expander("📊 Estadísticas del sistema"):
-    st.write(f"**Total de tutores registrados:** {len(tutores)}")
+No se encontraron tutores para esta búsqueda en el sistema de asesorías de la FCA-UACH.
+
+Algunas materias disponibles incluyen: {', '.join(materias_disponibles[:10])}...
+
+Como experto en asesorías académicas, proporciona:
+1. Términos de búsqueda alternativos más específicos
+2. Materias similares que podrían interesar al usuario
+3. Sugerencias para refinar la búsqueda
+
+Responde de manera académica, útil y alentadora."""
+            
+            st.session_state.history.append({"role":"user","content":prompt_contextual})
+            
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=st.session_state.history,
+                    max_tokens=400,
+                    temperature=0.3
+                )
+                ia_resp = response.choices[0].message.content
+                
+                st.session_state.history.append({"role":"assistant","content":ia_resp})
+                with st.chat_message("assistant"):
+                    st.write(ia_resp)
+            except Exception as e:
+                st.error(f"Error al generar respuesta de IA: {e}")
+
+# 9. Sección informativa mejorada
+with st.expander("📊 **Información del sistema**"):
     materias_unicas = len(set(t['materia'] for t in tutores))
-    st.write(f"**Materias disponibles:** {materias_unicas}")
+    maestros_unicos = len(set(t['maestro'] for t in tutores))
     
-    # Mostrar algunas materias de ejemplo
-    st.write("**Ejemplos de materias disponibles:**")
-    ejemplos = [t['materia'] for t in tutores[:10]]
-    for ejemplo in ejemplos:
-        st.write(f"• {ejemplo}")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total de registros", len(tutores))
+    with col2:
+        st.metric("Materias disponibles", materias_unicas)
+    with col3:
+        st.metric("Profesores registrados", maestros_unicos)
+    
+    # Mostrar muestra de materias más populares
+    st.markdown("**📚 Algunas materias disponibles:**")
+    materias_muestra = sorted(set(t['materia'] for t in tutores))[:15]
+    for i, materia in enumerate(materias_muestra):
+        if i % 3 == 0:
+            cols = st.columns(3)
+        with cols[i % 3]:
+            st.write(f"• {materia}")
