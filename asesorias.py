@@ -229,7 +229,7 @@ def buscar_tutores(consulta):
     # Ordenar por puntuación descendente
     if resultados:
         resultados_con_puntos = [(puntuaciones[t['materia']], t) for t in resultados]
-        resultados_ordenados = [tutor for _, tutor in sorted(resultados_con_puntos, reverse=True)]
+        resultados_ordenados = [tutor for puntuacion, tutor in sorted(resultados_con_puntos, reverse=True)]
         return resultados_ordenados[:15]  # Aumentar límite a 15 mejores resultados
     
     return []
@@ -310,7 +310,6 @@ if consulta:
         st.success(f"✅ **{len(recomendados)} tutor(es) encontrado(s) para tu consulta**")
         
         # Agrupar por materia para mejor presentación
-        import itertools
         from itertools import groupby
         
         # Agrupar resultados por materia
