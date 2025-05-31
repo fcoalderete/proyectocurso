@@ -1,6 +1,5 @@
-# Version 2.0: Corregido regex de búsqueda para materias con palabra clave
+# Version 2.1: Simplified substring search and header updated
 import os
-import re
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -24,7 +23,7 @@ def setup_sidebar():
         st.markdown("---")
         # Logo Universidad
         if os.path.exists("escudo-texto-color.png"):
-            c1, c2, c3 = st.columns([1,2,1])
+            c1, c2, c3 = st.columns([1, 2, 1])
             with c2:
                 st.image("escudo-texto-color.png", width=120)
         else:
@@ -37,7 +36,7 @@ def setup_sidebar():
         st.markdown("---")
         # Logo Facultad
         if os.path.exists("fca-escudo.png"):
-            c1, c2, c3 = st.columns([1,2,1])
+            c1, c2, c3 = st.columns([1, 2, 1])
             with c2:
                 st.image("fca-escudo.png", width=100)
         else:
@@ -88,34 +87,22 @@ index = preparar_indice(tutores)
 if "history" not in st.session_state:
     st.session_state.history = [{"role":"system","content":"Eres un asistente experto en tutorías de la FCA-UACH."}]
 for msg in st.session_state.history[1:]:
-    with st.chat_message(msg["role"]): st.write(msg["content"])
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
-# 6. Función de búsqueda mejorada usando regex de palabra clave
+# 6. Función de búsqueda simplificada (substring normalize)
 
 def buscar_tutores(consulta):
     norm = normalize_text(consulta)
-    pattern = re.compile(r"\b" + re.escape(norm), re.IGNORECASE)
-    matches = []
-    for t in tutores:
-        mat_norm = normalize_text(t['materia'])
-        # Coincidencia por regex en inicio de palabra
-        if pattern.search(mat_norm) or norm in mat_norm:
-            matches.append(t)
-    # Eliminar duplicados manteniendo orden
-    seen = set(); unique = []
-    for t in matches:
-        key = (t['materia'], t['maestro'])
-        if key not in seen:
-            unique.append(t); seen.add(key)
-    return unique
+    return [t for t in tutores if norm in normalize_text(t['materia'])]
 
 # 7. Interacción en chat
 consulta = st.chat_input("¿En qué materia necesitas asesoría?")
 if consulta:
     st.session_state.history.append({"role":"user","content":consulta})
-    with st.chat_message("user"): st.write(consulta)
+    with st.chat_message("user"):
+        st.write(consulta)
 
-    # Búsqueda en CSV
     with st.spinner("🔍 Buscando profesores..."):
         recomendados = buscar_tutores(consulta)
     st.markdown("---")
@@ -136,4 +123,5 @@ if consulta:
             )
             ia_resp = response.choices[0].message.content
         st.session_state.history.append({"role":"assistant","content":ia_resp})
-        with st.chat_message("assistant"): st.write(ia_resp)
+        with st.chat_message("assistant"):
+            st.write(ia_resp)
